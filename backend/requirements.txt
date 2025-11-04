@@ -2,7 +2,18 @@ fastapi
 uvicorn
 beanie
 motor
+pymongo==4.11.1
 pydantic
+pydantic-settings
 python-jose
 passlib[bcrypt]
+bcrypt<5.0.0  # Pin to < 5.0.0 for compatibility with passlib 1.7.4
 python-dotenv
+python-multipart
+python-docx
+pypdf
+numpy
+pytest
+pytest-asyncio
+httpx
+mongomock-motor
