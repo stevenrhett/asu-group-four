@@ -1,0 +1,56 @@
+# Workflow Status Template
+# This tracks progress through BMM methodology phases
+# Phase 3/4 (Implementation) is tracked separately in sprint-status.yaml
+
+# generated: 2025-11-04
+# project: asu-group-four
+# project_type: software
+# selected_track: method
+# field_type: greenfield
+# workflow_path: method-greenfield.yaml
+
+generated: "2025-11-04"
+project: "asu-group-four"
+project_type: "software"
+selected_track: "method"
+field_type: "greenfield"
+workflow_path: "method-greenfield.yaml"
+
+workflow_status:
+  # Phase 0: Discovery (Optional)
+  product-brief: required
+  # Phase 1: Planning
+  prd: "docs/PRD.md"
+  validate-prd: "docs/PRD-validation.md"
+  create-design: "docs/ux-design.md"
+  # Phase 2: Solutioning
+  create-architecture: "docs/architecture.md"
+  validate-architecture: "docs/architecture-validation.md"
+  solutioning-gate-check: "docs/bmm-readiness-assessment-2025-11-04.md"
+  # Phase 3: Implementation
+  sprint-planning: "docs/sprint-status.yaml"
+
+cis_summary:
+  date: "2025-11-04"
+  files:
+    brainstorming: "docs/brainstorming-session-results-2025-11-04.md"
+    design_thinking: "docs/design-thinking-2025-11-04.md"
+    problem_solving: "docs/problem-solution-2025-11-04.md"
+    storytelling: "docs/story-2025-11-04.md"
+  highlights:
+    - "Brainstorming: 48 ideas; priorities = MVP vertical slice, Recommendations v1, Employer smart inbox."
+    - "Design Thinking: Empathize→Test completed; E2E MVP focus with success metrics."
+    - "Problem Solving: Improve cold-start relevance via BM25+embeddings, normalization, explainability, feedback; monitoring plan defined."
+    - "Storytelling: Pitch narrative (short/medium/extended) for capstone + partner outreach."
+
+planning:
+  prd_file: "docs/PRD.md"
+  architecture_file: "docs/architecture.md"
+  tech_spec_file: "docs/tech-spec.md"
+  epics:
+    - "docs/epic-onboarding-profile.md"
+    - "docs/epic-recommendations-v1.md"
+    - "docs/epic-employer-inbox-scheduling.md"
+    - "docs/epic-auth.md"
+    - "docs/epic-notifications.md"
+    - "docs/epic-observability.md"
