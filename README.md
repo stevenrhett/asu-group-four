@@ -55,18 +55,37 @@ Built using the **BMAD-METHOD (Breakthrough Method for Agile AI-Driven Developme
 
 ## Getting Started
 
+### Quick Start
+See the [Quick Start Guide](docs/quick-start.md) for detailed setup instructions.
+
 ```bash
 # Clone the repo
-git clone https://github.com/<your-user>/JobPortal.git
-cd JobPortal
+git clone https://github.com/stevenrhett/asu-group-four.git
+cd asu-group-four
+
+# Start MongoDB
+docker run -d --name job-portal-mongo -p 27017:27017 mongo:latest
 
 # Start backend
-docker compose up --build
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-# Start frontend
-npm install && npm run dev
+# Start frontend (in a new terminal)
+cd frontend
+npm install
+npm run dev
 ```
-⸻
+
+### Documentation
+- 📚 [Full Documentation](docs/README.md) - Complete documentation index
+- 🚀 [Quick Start Guide](docs/quick-start.md) - Get up and running
+- 📋 [Product Requirements](docs/PRD.md) - Product specifications
+- 🏗️ [Architecture](docs/architecture.md) - System design
+- 🔍 [Observability](docs/observability-readme.md) - Monitoring and metrics
+
 ---
 
 ## Team Channel
