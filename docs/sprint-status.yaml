@@ -31,19 +31,41 @@ development_status:
   epic-observability: contexted
 
   # Stories (drafted)
-  ST-001-auth-and-jwt: in-progress
-  ST-002-resume-upload-and-parsing: ready-for-dev
-  ST-003-job-index-and-embeddings: ready-for-dev
-  ST-004-hybrid-scoring-and-ranking: ready-for-dev
-  ST-005-explainability-why-this-job: ready-for-dev
-  ST-006-employer-smart-inbox-basics: drafted
-  ST-008-status-change-emails: drafted
-  ST-009-scheduling-ics-email: drafted
-  ST-011-event-schema-and-logging: drafted
-  ST-012-metrics-dashboard-mvp: drafted
-  ST-013-latency-and-error-budgets: drafted
-  ST-015-job-posting-management: drafted
-  ST-014-apply-and-status-tracking: ready-for-dev
+  ST-001-auth-and-jwt: done
+  ST-002-resume-upload-and-parsing: done
+  ST-003-job-index-and-embeddings: done
+  ST-004-hybrid-scoring-and-ranking: done
+  ST-005-explainability-why-this-job: done
+  ST-006-employer-smart-inbox-basics: done
+  ST-008-status-change-emails: done
+  ST-009-scheduling-ics-email: done
+  ST-011-event-schema-and-logging: done
+  ST-012-metrics-dashboard-mvp: done
+  ST-013-latency-and-error-budgets: done
+  ST-015-job-posting-management: done
+  ST-014-apply-and-status-tracking: done
 
   # Retrospectives
   sprint-1-retrospective: optional
+
+# Sprint Planning Metadata
+sprint_goal: "Deliver end-to-end MVP vertical slice (Auth → Upload → Recommend + Explain → Apply → Status)."
+plan_doc: "docs/sprint-plan-sprint-1.md"
+ceremonies:
+  - "Daily standup"
+  - "Mid-sprint checkpoint"
+  - "Sprint review/demo"
+  - "Sprint retrospective"
+
+commitment_scope:
+  - ST-001-auth-and-jwt
+  - ST-002-resume-upload-and-parsing
+  - ST-003-job-index-and-embeddings
+  - ST-004-hybrid-scoring-and-ranking
+  - ST-005-explainability-why-this-job
+  - ST-014-apply-and-status-tracking
+
+notes:
+  - "Dependencies: ST-001 → ST-002 → ST-003 → ST-004 → ST-005; ST-001 → ST-014"
+  - "Fallbacks: BM25-only retrieval when embeddings unavailable"
+  - "Testing: unit + integration + E2E path for MVP slice"

@@ -3,7 +3,7 @@
 ID: ST-005  
 Epic: Recommendations v1  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Expose top contributing skills/terms and brief rationale for each recommendation to increase trust and clarity.
@@ -20,9 +20,9 @@ Expose top contributing skills/terms and brief rationale for each recommendation
 - ST-004 Hybrid Scoring & Ranking
 
 ## Tasks
-- [ ] Attribution payload in scoring response
-- [ ] UI component for explanation
-- [ ] Tests for presence/absence cases
+- [x] Attribution payload in scoring response
+- [x] UI component for explanation
+- [x] Tests for presence/absence cases
 
 ## FR Coverage
 - FR-004 Recommendation engine v1 (explainability)

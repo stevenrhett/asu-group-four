@@ -3,7 +3,7 @@
 ID: ST-002  
 Epic: Onboarding & Profile  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Allow seekers to upload a resume (PDF/DOCX) and parse into structured data (skills, titles, years, education).
@@ -21,10 +21,10 @@ Allow seekers to upload a resume (PDF/DOCX) and parse into structured data (skil
 - ST-001 Auth & JWT
 
 ## Tasks
-- [ ] Upload endpoint and storage
-- [ ] Parser integration and mappers
-- [ ] Profile draft update
-- [ ] Unit/integration tests
+- [x] Upload endpoint and storage
+- [x] Parser integration and mappers
+- [x] Profile draft update
+- [x] Unit/integration tests
 
 ## FR Coverage
 - FR-002 Resume upload and parsing

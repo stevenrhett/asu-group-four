@@ -3,7 +3,7 @@
 ID: ST-006  
 Epic: Employer Smart Inbox & Scheduling  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Create core inbox with filters (new, viewed, shortlisted, interview, rejected) and item list view.
@@ -20,9 +20,9 @@ Create core inbox with filters (new, viewed, shortlisted, interview, rejected) a
 - ST-001 Auth & JWT
 
 ## Tasks
-- [ ] Inbox UI + filters
-- [ ] Backend endpoints for list/update
-- [ ] Tests
+- [x] Backend: employer-scoped list endpoint (filters, counts) + shortlist action
+- [x] Frontend: Next.js inbox page with tabs, detail drawer, optimistic status update
+- [x] Tests: API unit/integration + React testing for filter logic
 
 ## FR Coverage
 - FR-006 Employer smart inbox

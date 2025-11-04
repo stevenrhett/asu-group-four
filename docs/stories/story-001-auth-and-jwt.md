@@ -3,7 +3,7 @@
 ID: ST-001  
 Epic: Authentication & Roles  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Implement secure registration/login with JWT, password hashing, and role claim (seeker/employer).
@@ -22,10 +22,10 @@ Implement secure registration/login with JWT, password hashing, and role claim (
 None
 
 ## Tasks
-- [ ] User model and DB collection (Beanie)
-- [ ] Hash/verify helpers
-- [ ] Register/Login routes + tests
-- [ ] JWT middleware + role check dependency
+- [x] User model and DB collection (Beanie)
+- [x] Hash/verify helpers
+- [x] Register/Login routes + tests
+- [x] JWT middleware + role check dependency
 
 ## FR Coverage
 - FR-001 Authentication and Authorization

@@ -3,7 +3,7 @@
 ID: ST-004  
 Epic: Recommendations v1  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Combine BM25 lexical scores with dense embedding similarity using tunable weights; return top-N ranked jobs.
@@ -20,9 +20,9 @@ Combine BM25 lexical scores with dense embedding similarity using tunable weight
 - ST-003 Job Index & Embeddings
 
 ## Tasks
-- [ ] Score combiner implementation
-- [ ] Config for weights and fallbacks
-- [ ] Unit tests
+- [x] Score combiner implementation
+- [x] Config for weights and fallbacks
+- [x] Unit tests
 
 ## FR Coverage
 - FR-004 Recommendation engine v1 (scoring)

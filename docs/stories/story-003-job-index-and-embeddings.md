@@ -3,7 +3,7 @@
 ID: ST-003  
 Epic: Recommendations v1  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Create an index for jobs (and optional seeker profile vectors) with normalized fields and dense embeddings for semantic matching.
@@ -20,10 +20,10 @@ Create an index for jobs (and optional seeker profile vectors) with normalized f
 - ST-002 Resume Parsing (normalized skills)
 
 ## Tasks
-- [ ] Normalization tables (skills/titles)
-- [ ] Indexer job and schema
-- [ ] Embedding integration and batching
-- [ ] Unit tests and data fixtures
+- [x] Normalization tables (skills/titles)
+- [x] Indexer job and schema
+- [x] Embedding integration and batching
+- [x] Unit tests and data fixtures
 
 ## FR Coverage
 - FR-004 Recommendation engine v1 (index foundation)

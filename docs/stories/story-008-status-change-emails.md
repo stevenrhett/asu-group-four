@@ -3,7 +3,7 @@
 ID: ST-008  
 Epic: Notifications  
 Owner: TBD  
-Status: drafted
+Status: in-review
 
 ## Description
 Send email notifications to seekers and employers when an application status changes (applied, viewed, shortlisted, interview, rejected).
@@ -21,11 +21,10 @@ Send email notifications to seekers and employers when an application status cha
 - ST-014 Apply & Status Tracking
 
 ## Tasks
-- [ ] Email templates per status
-- [ ] Send utility with provider abstraction
-- [ ] Hook into status update path
-- [ ] Tests
+- [x] Email templates per status
+- [x] Send utility with provider abstraction
+- [x] Hook into status update path
+- [x] Tests
 
 ## FR Coverage
 - FR-008 Notifications (status changes)
-
