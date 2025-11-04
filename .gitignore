@@ -1,0 +1,51 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+test-results/
+playwright-report/
+*.png
+*.jpg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+backend/storage/
+frontend/inspect-ui*.ts
+/tmp/
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

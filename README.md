@@ -1,72 +1,171 @@
-# JobPortal – AI-Driven Job Matching Platform
+# Job Portal - AI-Powered Job Matching Platform
 
-## Overview
-JobPortal is a secure, scalable, and AI-powered platform connecting job seekers and employers.  
-Built using the **BMAD-METHOD (Breakthrough Method for Agile AI-Driven Development)**, the system leverages a virtual AI team — Analyst, Product Manager, Architect, and Developer — to accelerate high-quality software delivery.
+An intelligent job matching platform that connects job seekers with employers using hybrid AI-powered recommendations combining BM25 text matching and semantic embeddings.
 
-**BMAD-METHOD:** [github.com/bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD)
-
----
-
-## Core Features
+## ✨ Features
 
 ### For Job Seekers
-- Create an account, profile, and upload a résumé  
-- Search and apply for jobs by title, skills, or company  
-- View application history and receive alerts  
-- AI-driven job recommendations  
+- 🔐 Secure authentication with JWT
+- 📄 Resume upload and automatic parsing (PDF/DOCX)
+- 🎯 AI-powered job recommendations based on skills and experience
+- 📊 View recommendation scores with explanations
+- 🔍 Browse and apply to job postings
 
 ### For Employers
-- Register and manage company profile  
-- Post and manage job listings  
-- Review applications and schedule interviews  
-- AI-assisted candidate matching  
+- 🏢 Create and manage job postings
+- 📥 Smart inbox with AI-assisted candidate filtering
+- 📧 Application status notifications
+- 📅 Interview scheduling with calendar invites
+- 🎯 View candidate match scores
+
+## 🚀 Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| **Frontend** | Next.js 14, React, TypeScript |
+| **Backend** | FastAPI (Python 3.11+), Uvicorn |
+| **Database** | MongoDB + Beanie ODM |
+| **AI/ML** | Sentence Transformers, BM25 |
+| **Authentication** | JWT, bcrypt |
+| **Testing** | Pytest, Playwright, Jest |
+| **Deployment** | Docker |
+
+## 📋 Key Features
+
+- **Hybrid Scoring System**: Combines BM25 text matching with semantic embeddings for accurate recommendations
+- **Resume Parsing**: Automatic extraction of skills, job titles, and experience from uploaded resumes
+- **Real-time Notifications**: Email alerts for application status changes and interview invitations
+- **Smart Inbox**: AI-powered filtering and ranking of job applications for employers
+- **Explainability**: Clear scoring breakdown showing why jobs were recommended
+- **Observability**: Comprehensive logging, metrics, and performance monitoring  
 
 ---
 
-## Technical Stack
+## 🏁 Quick Start
 
-| **Layer** | **Technology** |
-|------------|----------------|
-| **Frontend** | Next.js 14, React, TypeScript, Tailwind CSS |
-| **Backend** | FastAPI (Python 3.11+), Uvicorn/Gunicorn |
-| **Database** | MongoDB 6.x (Atlas) + Beanie ODM |
-| **AI Layer** | LangChain + OpenAI (GPT-4o / Claude 3.x) + ChromaDB |
-| **Auth & Security** | JWT, bcrypt, input validation, logging |
-| **Deployment** | Docker + environment-based config |
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- MongoDB (or Docker)
 
----
+### 1. Clone the Repository
+```bash
+git clone https://github.com/stevenrhett/asu-group-four.git
+cd asu-group-four
+```
 
-## System Expectations
-- Strong password hashing and token-based authentication  
-- Consistent error handling, logging, and validation  
-- Modular architecture with clear separation of concerns  
+### 2. Start MongoDB
+```bash
+docker run -d --name job-portal-mongo -p 27017:27017 mongo:latest
+```
 
----
+### 3. Setup Backend
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
 
-## Deliverables
-- Working application demo  
-- ERD and architecture diagrams  
-- Docker setup and `.env.example`  
-- Unit tests and structured logs  
-- Comprehensive README and setup guide  
+### 4. Setup Frontend (in a new terminal)
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
----
+### 5. Access the Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
 
-## Getting Started
+### Quick Start Script
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+## 🔧 Configuration
+
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-# Clone the repo
-git clone https://github.com/<your-user>/JobPortal.git
-cd JobPortal
-
-# Start backend
-docker compose up --build
-
-# Start frontend
-npm install && npm run dev
+cp .env.example .env
 ```
-⸻
+
+Key environment variables:
+- `MONGODB_URL` - MongoDB connection string
+- `SECRET_KEY` - JWT secret key
+- `SMTP_HOST`, `SMTP_PORT` - Email configuration
+- `FRONTEND_URL` - Frontend URL for CORS
+
+## 📚 Documentation
+
+- � [Quick Start Guide](docs/quick-start.md) - Detailed setup instructions
+- 📋 [Product Requirements](docs/PRD.md) - Complete PRD
+- 🏗️ [Architecture](docs/architecture.md) - System design and architecture
+- 🔍 [Observability Guide](docs/observability-readme.md) - Metrics and monitoring
+- 📊 [API Documentation](http://localhost:8000/docs) - Interactive API docs (when running)
+- 🧪 [Testing Guide](docs/sprints/sprint-1/TEST-RUNBOOK.md) - How to run tests
+
+## 🧪 Running Tests
+
+### Backend Tests
+```bash
+cd backend
+source venv/bin/activate
+pytest
+```
+
+### Frontend Tests
+```bash
+cd frontend
+npm test                           # Jest unit tests
+npx playwright test               # E2E tests
+```
+
+## 📁 Project Structure
+
+```
+asu-group-four/
+├── backend/              # FastAPI backend
+│   ├── app/
+│   │   ├── api/         # API routes
+│   │   ├── models/      # Database models
+│   │   ├── services/    # Business logic (ML, parsing, email)
+│   │   ├── core/        # Config, security, middleware
+│   │   └── schemas/     # Pydantic schemas
+│   └── tests/           # Pytest test suite
+│
+├── frontend/            # Next.js frontend
+│   ├── app/            # Next.js app directory
+│   ├── components/     # React components
+│   ├── e2e/            # Playwright tests
+│   └── __tests__/      # Jest unit tests
+│
+└── docs/               # Documentation
+    ├── stories/        # User stories
+    └── sprints/        # Sprint deliverables
+```
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
+
+## 👥 Team
+
+**Arizona State University - Group 4**
+
+- Andre Exilien
+- David Nwankwo
+- Muhammad Zahid
+- Steven Johnson
+
+---
+
+**Project Repository**: [github.com/stevenrhett/asu-group-four](https://github.com/stevenrhett/asu-group-four)
+
 ---
 
 ## Team Channel
