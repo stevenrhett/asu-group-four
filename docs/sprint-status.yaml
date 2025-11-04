@@ -1,0 +1,49 @@
+# Sprint Status
+
+generated: 2025-11-04
+project: asu-group-four
+project_key: asu-group-four
+tracking_system: file-system
+story_location: "{project-root}/docs/stories"
+
+current_sprint: "Sprint 1"
+sprints:
+  Sprint 1:
+    - ST-001-auth-and-jwt
+    - ST-002-resume-upload-and-parsing
+    - ST-003-job-index-and-embeddings
+    - ST-004-hybrid-scoring-and-ranking
+    - ST-005-explainability-why-this-job
+    - ST-014-apply-and-status-tracking
+  Sprint 2:
+    - ST-006-employer-smart-inbox-basics
+    - ST-009-scheduling-ics-email
+    - ST-015-job-posting-management
+    - ST-008-status-change-emails
+
+development_status:
+  # Epics
+  epic-onboarding-profile: contexted
+  epic-recommendations-v1: contexted
+  epic-employer-inbox-scheduling: contexted
+  epic-auth: contexted
+  epic-notifications: contexted
+  epic-observability: contexted
+
+  # Stories (drafted)
+  ST-001-auth-and-jwt: in-progress
+  ST-002-resume-upload-and-parsing: ready-for-dev
+  ST-003-job-index-and-embeddings: ready-for-dev
+  ST-004-hybrid-scoring-and-ranking: ready-for-dev
+  ST-005-explainability-why-this-job: ready-for-dev
+  ST-006-employer-smart-inbox-basics: drafted
+  ST-008-status-change-emails: drafted
+  ST-009-scheduling-ics-email: drafted
+  ST-011-event-schema-and-logging: drafted
+  ST-012-metrics-dashboard-mvp: drafted
+  ST-013-latency-and-error-budgets: drafted
+  ST-015-job-posting-management: drafted
+  ST-014-apply-and-status-tracking: ready-for-dev
+
+  # Retrospectives
+  sprint-1-retrospective: optional
