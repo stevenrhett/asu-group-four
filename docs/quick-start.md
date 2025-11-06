@@ -195,20 +195,36 @@ npm install
 
 ## Quick Commands Summary
 
-**Start Everything (in separate terminals):**
+### Option 1: Using the Management Script (Recommended)
+
+```bash
+# Start everything with one command
+./manage.sh start
+
+# Check status
+./manage.sh --status
+
+# Stop everything
+./manage.sh stop
+
+# See all options
+./manage.sh --help
+```
+
+### Option 2: Manual Setup (in separate terminals)
 
 ```bash
 # Terminal 1: MongoDB
 docker run -d --name job-portal-mongo -p 27017:27017 mongo:latest
 
 # Terminal 2: Backend
-cd /Users/dre/JobPortal/asu-group-four/backend
+cd backend
 source venv/bin/activate
 export MONGODB_URI="mongodb://localhost:27017"
 uvicorn app.main:app --reload --port 8000
 
 # Terminal 3: Frontend
-cd /Users/dre/JobPortal/asu-group-four/frontend
+cd frontend
 npm run dev
 ```
 
@@ -217,6 +233,8 @@ npm run dev
 - 📡 **Backend API:** http://localhost:8000
 - 📚 **API Docs:** http://localhost:8000/docs
 - 🗄️ **MongoDB:** localhost:27017
+
+**📘 For detailed management options, see the [Service Management Guide](service-management-guide.md)**
 
 ---
 
@@ -250,6 +268,12 @@ uvicorn app.main:app --reload
 
 ## Stop Everything
 
+### Using Management Script:
+```bash
+./manage.sh stop
+```
+
+### Manual Shutdown:
 ```bash
 # Stop frontend (CTRL+C in Terminal 3)
 

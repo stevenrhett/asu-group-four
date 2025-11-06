@@ -82,9 +82,15 @@ npm run dev
 
 ### Quick Start Script
 ```bash
-chmod +x start.sh
-./start.sh
+chmod +x manage.sh
+./manage.sh start          # Start all services
+./manage.sh restart        # Restart all (auto-cleans ports!)
+./manage.sh --status       # Check service status
+./manage.sh stop           # Stop all services
+./manage.sh --help         # See all commands
 ```
+
+**✨ New:** Restart commands automatically clean up orphaned processes - no more port conflicts!
 
 ## 🔧 Configuration
 
@@ -103,6 +109,7 @@ Key environment variables:
 ## 📚 Documentation
 
 - � [Quick Start Guide](docs/quick-start.md) - Detailed setup instructions
+- 🔧 [Service Management Guide](docs/service-management-guide.md) - Using manage.sh to control services
 - 📋 [Product Requirements](docs/PRD.md) - Complete PRD
 - 🏗️ [Architecture](docs/architecture.md) - System design and architecture
 - 🔍 [Observability Guide](docs/observability-readme.md) - Metrics and monitoring
@@ -151,7 +158,7 @@ asu-group-four/
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for development guidelines.
 
 ## 👥 Team
 
