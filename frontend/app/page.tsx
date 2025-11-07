@@ -99,6 +99,19 @@ export default function HomePage() {
   const [isLoadingInbox, setIsLoadingInbox] = useState(false);
   const [inboxError, setInboxError] = useState<string | null>(null);
 
+  // Job Search State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [searchFilters, setSearchFilters] = useState({
+    remoteOnly: false,
+    salaryMin: "",
+    salaryMax: "",
+  });
+
   const isSeeker = userRole === "seeker";
   const isEmployer = userRole === "employer";
 
@@ -359,6 +372,56 @@ export default function HomePage() {
     }
   };
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      setSearchError("Please enter a keyword to search");
+      return;
+    }
+    
+    setSearchError(null);
+    setIsSearching(true);
+    setHasSearched(true);
+    
+    try {
+      const queryParams = new URLSearchParams();
+      queryParams.set('q', searchQuery);
+      if (searchLocation.trim()) {
+        queryParams.set('location', searchLocation);
+      }
+      if (searchFilters.remoteOnly) {
+        queryParams.set('remote_only', 'true');
+      }
+      if (searchFilters.salaryMin) {
+        queryParams.set('salary_min', searchFilters.salaryMin);
+      }
+      if (searchFilters.salaryMax) {
+        queryParams.set('salary_max', searchFilters.salaryMax);
+      }
+      queryParams.set('page', '1');
+      queryParams.set('page_size', '20');
+      queryParams.set('sort_by', 'relevance');
+      
+      const response = await fetch(`${API_BASE}/jobs/search?${queryParams.toString()}`);
+      
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.detail ?? "Search failed");
+      }
+      
+      const data = await response.json();
+      setSearchResults(data.jobs || []);
+      
+      if (!data.jobs || data.jobs.length === 0) {
+        setSearchError("No jobs found matching your search");
+      }
+    } catch (error) {
+      setSearchError(error instanceof Error ? error.message : "Failed to search jobs");
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   // Not authenticated - show auth form
   if (!token) {
     return (
@@ -521,6 +584,192 @@ export default function HomePage() {
                     </p>
                   </details>
                 )}
+              </div>
+            )}
+          </CardBody>
+        </Card>
+      )}
+
+      {/* Job Search - Seeker Only */}
+      {isSeeker && (
+        <Card glassmorphic>
+          <CardHeader>
+            <CardTitle>Search Jobs</CardTitle>
+            <p style={{ color: "var(--neutral-600)", fontSize: "var(--text-sm)", margin: "var(--space-2) 0 0" }}>
+              Search for jobs by role, skills, or keywords
+            </p>
+          </CardHeader>
+          <CardBody>
+            {/* Main Search Bar */}
+            <div style={{ display: "flex", gap: "var(--space-3)", marginBottom: "var(--space-4)" }}>
+              <div style={{ flex: 1 }}>
+                <Input
+                  type="text"
+                  placeholder="Enter role, skills, or keywords (e.g., Frontend Developer, React, Python)"
+                  value={searchQuery}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
+                />
+              </div>
+              <Button
+                variant="primary"
+                onClick={handleSearch}
+                disabled={isSearching}
+                isLoading={isSearching}
+                style={{ minWidth: "120px" }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: "8px" }}>
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+                {isSearching ? "Searching..." : "Search"}
+              </Button>
+            </div>
+
+            {/* Advanced Filters */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-3)", marginBottom: "var(--space-4)", padding: "var(--space-4)", background: "var(--neutral-50)", borderRadius: "8px" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)", color: "var(--neutral-700)", marginBottom: "var(--space-2)" }}>
+                  Location
+                </label>
+                <Input
+                  type="text"
+                  placeholder="e.g., New York, Remote"
+                  value={searchLocation}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchLocation(e.target.value)}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)", color: "var(--neutral-700)", marginBottom: "var(--space-2)" }}>
+                  Min Salary ($)
+                </label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 80000"
+                  value={searchFilters.salaryMin}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchFilters({...searchFilters, salaryMin: e.target.value})}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)", color: "var(--neutral-700)", marginBottom: "var(--space-2)" }}>
+                  Max Salary ($)
+                </label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 150000"
+                  value={searchFilters.salaryMax}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchFilters({...searchFilters, salaryMax: e.target.value})}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", cursor: "pointer", fontSize: "var(--text-sm)", color: "var(--neutral-700)" }}>
+                  <input
+                    type="checkbox"
+                    checked={searchFilters.remoteOnly}
+                    onChange={(e) => setSearchFilters({...searchFilters, remoteOnly: e.target.checked})}
+                    style={{ width: "18px", height: "18px", cursor: "pointer" }}
+                  />
+                  <span style={{ fontWeight: "var(--font-medium)" }}>Remote Only</span>
+                </label>
+              </div>
+            </div>
+
+            {searchError && <Alert variant="error">{searchError}</Alert>}
+            
+            {hasSearched && !isSearching && searchResults.length === 0 && !searchError && (
+              <p style={{ color: "var(--neutral-500)", textAlign: "center", padding: "var(--space-8)" }}>
+                No jobs found matching "{searchQuery}". Try different keywords.
+              </p>
+            )}
+
+            {searchResults.length > 0 && (
+              <div>
+                <p style={{ color: "var(--neutral-700)", fontWeight: "var(--font-semibold)", marginBottom: "var(--space-4)" }}>
+                  Found {searchResults.length} jobs matching "{searchQuery}"
+                </p>
+                <ul style={{ display: "grid", gap: "var(--space-4)", paddingLeft: 0, listStyle: "none" }}>
+                  {searchResults.map((job: any) => (
+                    <li key={job.id || job._id}>
+                      <Card hover>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "var(--space-3)" }}>
+                          <h3 style={{ margin: 0, fontSize: "var(--text-xl)", fontWeight: "var(--font-semibold)", color: "var(--neutral-900)" }}>
+                            {job.title}
+                          </h3>
+                          <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+                            {job.score && (
+                              <Badge variant="primary">
+                                Score {typeof job.score === 'number' ? job.score.toFixed(3) : job.score}
+                              </Badge>
+                            )}
+                            {job.company && (
+                              <Badge variant="neutral">{job.company}</Badge>
+                            )}
+                          </div>
+                        </div>
+                        {job.location && (
+                          <p style={{ margin: "0 0 var(--space-2)", color: "var(--neutral-600)", fontSize: "var(--text-sm)" }}>
+                            📍 {job.location}
+                          </p>
+                        )}
+                        
+                        {/* BM25 and Vector Scores */}
+                        {(job.bm25_score !== undefined || job.vector_score !== undefined) && (
+                          <p style={{ margin: "0 0 var(--space-3)", color: "var(--neutral-500)", fontSize: "var(--text-sm)" }}>
+                            {job.bm25_score !== undefined && `BM25 ${job.bm25_score.toFixed(3)}`}
+                            {job.bm25_score !== undefined && job.vector_score !== undefined && ' • '}
+                            {job.vector_score !== undefined && `Vector ${job.vector_score.toFixed(3)}`}
+                          </p>
+                        )}
+                        
+                        {job.description && (
+                          <p style={{ margin: "0 0 var(--space-3)", color: "var(--neutral-700)" }}>
+                            {job.description.length > 200 ? `${job.description.substring(0, 200)}...` : job.description}
+                          </p>
+                        )}
+                        
+                        {/* Match Explanations */}
+                        {job.explanations && job.explanations.length > 0 && (
+                          <div style={{ margin: "0 0 var(--space-3)" }}>
+                            <RecommendationExplanationChips explanations={job.explanations} />
+                          </div>
+                        )}
+                        
+                        {/* Skills Badges */}
+                        {job.skills && job.skills.length > 0 && (
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", marginTop: "var(--space-3)" }}>
+                            {job.skills.slice(0, 10).map((skill: string, idx: number) => (
+                              <Badge key={`${skill}-${idx}`} variant="primary">{skill}</Badge>
+                            ))}
+                            {job.skills.length > 10 && (
+                              <Badge variant="neutral">+{job.skills.length - 10} more</Badge>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Salary and Work Type */}
+                        <div style={{ display: "flex", gap: "var(--space-4)", marginTop: "var(--space-3)", flexWrap: "wrap" }}>
+                          {job.salary_min && job.salary_max && (
+                            <span style={{ color: "var(--neutral-600)", fontSize: "var(--text-sm)", fontWeight: "var(--font-semibold)" }}>
+                              💰 ${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()}
+                            </span>
+                          )}
+                          {job.work_type && (
+                            <Badge variant={job.work_type === 'remote' ? 'success' : 'neutral'}>
+                              {job.work_type.charAt(0).toUpperCase() + job.work_type.slice(1)}
+                            </Badge>
+                          )}
+                          {job.job_type && (
+                            <Badge variant="neutral">{job.job_type}</Badge>
+                          )}
+                        </div>
+                      </Card>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </CardBody>
