@@ -1,0 +1,12 @@
+
+> job-portal-frontend@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.0
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1108ms
+ ○ Compiling / ...
+ ✓ Compiled / in 850ms (475 modules)
+ GET / 200 in 925ms

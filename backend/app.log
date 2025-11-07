@@ -1,0 +1,21 @@
+INFO:     Will watch for changes in these directories: ['/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [62185] using StatReload
+INFO:     Started server process [62187]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+{"event": "request_start", "method": "OPTIONS", "path": "/api/v1/auth/register"}
+{"event": "request_complete", "method": "OPTIONS", "path": "/api/v1/auth/register", "status_code": 200}
+INFO:     127.0.0.1:62186 - "OPTIONS /api/v1/auth/register HTTP/1.1" 200 OK
+{"event": "request_start", "method": "POST", "path": "/api/v1/auth/register"}
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+{"event": "request_complete", "method": "POST", "path": "/api/v1/auth/register", "status_code": 201}
+INFO:     127.0.0.1:62186 - "POST /api/v1/auth/register HTTP/1.1" 201 Created
+{"event": "request_start", "method": "POST", "path": "/api/v1/auth/login"}
+{"event": "request_complete", "method": "POST", "path": "/api/v1/auth/login", "status_code": 200}
+INFO:     127.0.0.1:62186 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
