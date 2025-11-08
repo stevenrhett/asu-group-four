@@ -17,6 +17,7 @@ from app.api.v1.routes.performance import router as performance_router
 from app.api.v1.routes.recommendations import router as recommendations_router
 from app.api.v1.routes.scheduling import router as scheduling_router
 from app.api.v1.routes.uploads import router as uploads_router
+from app.api.v1.routes.users import router as users_router
 from app.core import compat  # noqa: F401
 from app.core.context import get_correlation_id, set_correlation_id
 from app.db.init_db import init_db
@@ -128,6 +129,7 @@ async def health():
 
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(users_router, prefix="/api/v1/users", tags=["users"])
 app.include_router(jobs_router, prefix="/api/v1/jobs", tags=["jobs"])
 app.include_router(applications_router, prefix="/api/v1/applications", tags=["applications"])
 app.include_router(scheduling_router, prefix="/api/v1/scheduling", tags=["scheduling"])

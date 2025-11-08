@@ -16,9 +16,10 @@ Deliver fast, low-friction onboarding so seekers can upload a resume, auto-extra
 - Advanced portfolio import; social profile sync; full ATS import (post-MVP)
 
 ## Stories
-- [ ] ST-002 Resume Upload & Parsing
+- [x] ST-002 Resume Upload & Parsing
 - [ ] ST-007 Seeker Minimal Profile Completion
 - [ ] ST-008 Seeker Dashboard: Progress + Next Actions
+- [ ] ST-016 Account Settings & Profile Management
 
 ---
 

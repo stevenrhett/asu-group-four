@@ -9,6 +9,7 @@ Keep users informed at key moments to drive momentum (apply confirmations, statu
 - Provider abstraction (e.g., SendGrid-compatible)
 
 ## Stories
-- [ ] ST-008 Status Change Emails
-- [ ] ST-009a Scheduling Email Template
+- [x] ST-008 Status Change Emails
+- [x] ST-009 Scheduling Email & ICS
+- [ ] ST-018 Notification Preferences
 

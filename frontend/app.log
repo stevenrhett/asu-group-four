@@ -6,7 +6,19 @@
   - Local:        http://localhost:3000
 
  ✓ Starting...
- ✓ Ready in 1108ms
- ○ Compiling / ...
- ✓ Compiled / in 850ms (475 modules)
- GET / 200 in 925ms
+ ✓ Ready in 1012ms
+ ✓ Compiled /settings in 300ms (454 modules)
+ GET /settings 200 in 369ms
+ ✓ Compiled / in 126ms (470 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 146ms
+ GET /settings 200 in 17ms
+ GET / 200 in 18ms
+ GET /settings 200 in 10ms
+ ✓ Compiled in 134ms (470 modules)
+ ✓ Compiled in 71ms (470 modules)
+ GET /settings 200 in 60ms
+ GET / 200 in 24ms
+ GET / 200 in 12ms
+ GET /settings 200 in 17ms
+ GET / 200 in 15ms

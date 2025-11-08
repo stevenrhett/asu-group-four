@@ -20,6 +20,8 @@ sprints:
     - ST-009-scheduling-ics-email
     - ST-015-job-posting-management
     - ST-008-status-change-emails
+    - ST-016-account-settings
+    - ST-018-notification-preferences
 
 development_status:
   # Epics
@@ -44,6 +46,8 @@ development_status:
   ST-013-latency-and-error-budgets: done
   ST-015-job-posting-management: done
   ST-014-apply-and-status-tracking: done
+  ST-016-account-settings: review
+  ST-018-notification-preferences: draft
 
   # Retrospectives
   sprint-1-retrospective: optional

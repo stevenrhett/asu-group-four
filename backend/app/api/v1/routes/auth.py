@@ -14,7 +14,16 @@ async def register(payload: UserCreate):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     user = User(email=payload.email, hashed_password=hash_password(payload.password), role=payload.role)
     await user.insert()
-    return UserPublic(id=str(user.id), email=user.email, role=user.role)
+    return UserPublic(
+        id=str(user.id), 
+        email=user.email, 
+        role=user.role,
+        phone=user.phone,
+        linkedin_url=user.linkedin_url,
+        website_url=user.website_url,
+        is_active=user.is_active,
+        created_at=user.created_at
+    )
 
 
 @router.post("/login")
