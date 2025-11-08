@@ -59,3 +59,120 @@ INFO:     127.0.0.1:50818 - "GET /api/v1/users/me HTTP/1.1" 200 OK
 {"event_type": "sla.error_budget_exceeded", "timestamp": "2025-11-08T19:52:23.926505", "correlation_id": null, "actor_id": null, "severity": "critical", "metadata": {"endpoint": "/api/v1/users/me", "error_rate": 0.6666666666666666, "error_budget": 0.01, "error_count": 8, "request_count": 12}}
 {"event": "request_complete", "method": "GET", "path": "/api/v1/users/me", "status_code": 200}
 INFO:     127.0.0.1:50823 - "GET /api/v1/users/me HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9786]
+INFO:     Started server process [10434]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'app/api/v1/routes/users.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10434]
+INFO:     Started server process [10801]
+INFO:     Waiting for application startup.
+WARNING:  StatReload detected changes in 'app/api/v1/routes/users.py'. Reloading...
+ERROR:    Traceback (most recent call last):
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 211, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 204, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/app/main.py", line 66, in lifespan
+    await init_db()
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/app/db/init_db.py", line 19, in init_db
+    await init_beanie(database=db, document_models=[User, Job, Application, Profile, EventLog])
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/beanie/odm/utils/init.py", line 780, in init_beanie
+    await Initializer(
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/beanie/odm/utils/init.py", line 131, in __await__
+    yield from self.init_class(model).__await__()
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/beanie/odm/utils/init.py", line 743, in init_class
+    await self.init_document(cls)
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/beanie/odm/utils/init.py", line 574, in init_document
+    build_info = await self.database.command({"buildInfo": 1})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/_csot.py", line 119, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/database.py", line 926, in command
+    with self._client._conn_for_reads(read_preference, session, operation=command_name) as (
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 1699, in _conn_for_reads
+    server = self._select_server(read_preference, session, operation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/mongo_client.py", line 1647, in _select_server
+    server = topology.select_server(
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/topology.py", line 402, in select_server
+    server = self._select_server(
+             ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/topology.py", line 380, in _select_server
+    servers = self.select_servers(
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/topology.py", line 287, in select_servers
+    server_descriptions = self._select_servers_loop(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/davidnwankwo/Documents/Notes/ASU_Revature/asu-group-four/backend/venv/lib/python3.12/site-packages/pymongo/synchronous/topology.py", line 337, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: SSL handshake failed: ac-mdsnsrp-shard-00-00.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms),SSL handshake failed: ac-mdsnsrp-shard-00-02.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms),SSL handshake failed: ac-mdsnsrp-shard-00-01.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 30s, Topology Description: <TopologyDescription id: 690fa1447e290c50f1920c1e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('ac-mdsnsrp-shard-00-00.8fghub5.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('SSL handshake failed: ac-mdsnsrp-shard-00-00.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-mdsnsrp-shard-00-01.8fghub5.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('SSL handshake failed: ac-mdsnsrp-shard-00-01.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>, <ServerDescription ('ac-mdsnsrp-shard-00-02.8fghub5.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('SSL handshake failed: ac-mdsnsrp-shard-00-02.8fghub5.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+
+ERROR:    Application startup failed. Exiting.
+INFO:     Started server process [10823]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

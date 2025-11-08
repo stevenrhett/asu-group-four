@@ -137,3 +137,4 @@ Allow both job seekers and employers to configure their notification preferences
 **Story Points:** 5  
 **Sprint:** Sprint 2
 
+

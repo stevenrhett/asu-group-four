@@ -22,3 +22,5 @@
  GET / 200 in 12ms
  GET /settings 200 in 17ms
  GET / 200 in 15ms
+ ✓ Compiled in 143ms (470 modules)
+ ✓ Compiled in 50ms (470 modules)

@@ -471,3 +471,4 @@ async def test_unauthorized_access_to_settings(app_client: AsyncClient):
     response = await app_client.delete("/api/v1/users/me", json={"password": "test"})
     assert response.status_code == 401
 
+

@@ -67,9 +67,9 @@ async def deactivate_account(current_user: User = Depends(get_current_user)):
     # Log deactivation event for audit
     event = EventLog(
         event_type="account_deactivated",
-        user_id=str(current_user.id),
-        metadata={"email": current_user.email, "role": current_user.role},
-        timestamp=datetime.utcnow()
+        actor_id=str(current_user.id),
+        subject_id=str(current_user.id),
+        metadata={"email": current_user.email, "role": current_user.role}
     )
     await event.insert()
     
@@ -122,14 +122,14 @@ async def delete_account_permanently(
     # 3. Log deletion event for compliance audit trail
     event = EventLog(
         event_type="account_deleted_permanently",
-        user_id=user_id,
+        actor_id=user_id,
+        subject_id=user_id,
         metadata={
             "email": user_email,
             "role": current_user.role,
             "applications_anonymized": len(applications),
             "profile_deleted": profile is not None
-        },
-        timestamp=datetime.utcnow()
+        }
     )
     await event.insert()
     
@@ -142,4 +142,5 @@ async def delete_account_permanently(
     await current_user.delete()
     
     return {"message": "Account permanently deleted"}
+
 
