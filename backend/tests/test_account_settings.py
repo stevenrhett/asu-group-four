@@ -472,3 +472,4 @@ async def test_unauthorized_access_to_settings(app_client: AsyncClient):
     assert response.status_code == 401
 
 
+

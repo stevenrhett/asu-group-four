@@ -138,3 +138,4 @@ Allow both job seekers and employers to configure their notification preferences
 **Sprint:** Sprint 2
 
 
+
