@@ -161,6 +161,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 ---
 
@@ -172,8 +173,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 **[Team Channel – project-team-4](https://asu.enterprise.slack.com/archives/C09Q3SM2THV)**  
 
-**Members:**  
-David Nwankwo • Muhammad Zahid • Steven Johnson • Andre Exilien  
+**Members:**
+David Nwankwo • Muhammad Zahid • Steven Johnson • Andre Exilien • Ishita Sharma  
 
 This channel includes:  
 - 💬 Real-time messaging for collaboration  

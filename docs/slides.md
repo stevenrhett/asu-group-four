@@ -13,7 +13,7 @@ footer: 'Team 4 | Arizona State University'
 
 **Team 4 - Arizona State University**
 
-Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson
+Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson • Ishita Sharma
 
 ---
 
@@ -455,7 +455,7 @@ cd asu-group-four
 
 **Team 4 - Arizona State University**
 
-Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson
+Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson • Ishita Sharma
 
 **Repository:** github.com/stevenrhett/asu-group-four
 

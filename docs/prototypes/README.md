@@ -241,6 +241,7 @@ For questions about these prototypes or the presentation:
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 **Repository:** https://github.com/stevenrhett/asu-group-four
 

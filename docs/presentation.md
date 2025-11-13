@@ -6,6 +6,7 @@
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 ---
 
@@ -22,6 +23,7 @@
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 **Project:** AI-Powered Job Matching Platform
 
@@ -713,6 +715,7 @@ cd asu-group-four
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 **Repository:** [github.com/stevenrhett/asu-group-four](https://github.com/stevenrhett/asu-group-four)
 

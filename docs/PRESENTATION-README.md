@@ -182,7 +182,7 @@ See `prototypes/README.md` for complete demo script and tips.
 
 The title slide shows:
 ```markdown
-Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson
+Andre Exilien • David Nwankwo • Muhammad Zahid • Steven Johnson • Ishita Sharma
 ```
 
 Update this if needed, or assign specific speakers to sections.
@@ -264,6 +264,7 @@ A: Yes - async architecture, horizontal scaling ready
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 **Repository:** https://github.com/stevenrhett/asu-group-four
 
