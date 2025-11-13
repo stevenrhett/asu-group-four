@@ -161,6 +161,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 - David Nwankwo
 - Muhammad Zahid
 - Steven Johnson
+- Ishita Sharma
 
 ---
 
