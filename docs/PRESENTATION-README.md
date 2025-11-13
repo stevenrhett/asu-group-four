@@ -17,6 +17,11 @@ This directory contains comprehensive presentation materials for a 20-minute tea
 - **`speaker-guide.md`** - Quick reference guide for each speaker
 - **`presentation-summary.md`** - One-page handout for audience
 
+### 🎨 Interactive Prototypes (NEW!)
+- **`prototypes/employer-dashboard.html`** - Employer Smart Inbox demo
+- **`prototypes/job-seeker-dashboard.html`** - Job Seeker Recommendations demo
+- **`prototypes/README.md`** - Complete guide for using prototypes in presentation
+
 ## How to Use the Slides
 
 ### Option 1: Marp (Recommended)
@@ -109,6 +114,56 @@ The slides are marked with speaker sections:
 - **Fonts**: Use default fonts for compatibility
 - **Demo**: Have screenshots as backup if live demo fails
 - **Timing**: Keep a timer visible to all speakers
+
+## Using the Interactive Prototypes
+
+### What Are They?
+
+The `prototypes/` folder contains two fully-functional HTML prototypes that you can open in any browser to demonstrate the platform during your presentation:
+
+1. **Employer Dashboard** - Shows the Smart Inbox with AI-ranked applicants
+2. **Job Seeker Dashboard** - Shows personalized recommendations with explainability
+
+### When to Use Them
+
+**Speaker 5 (Demo & Results section)** should use these prototypes instead of (or in addition to) the live application:
+
+**Benefits:**
+- ✅ No setup required - just double-click to open
+- ✅ No database needed - pre-populated with demo data
+- ✅ No risk of crashes or technical issues
+- ✅ Optimized for presentation with clear visuals
+- ✅ Interactive - you can click buttons and show actions
+
+### Quick Start
+
+```bash
+# Open employer view
+open docs/prototypes/employer-dashboard.html
+
+# Open job seeker view
+open docs/prototypes/job-seeker-dashboard.html
+```
+
+Or simply double-click the HTML files to open them in your browser.
+
+### Demo Flow Recommendation
+
+**Part 1: Job Seeker View (1-2 minutes)**
+1. Open `job-seeker-dashboard.html`
+2. Point out the 92% match score on the top job
+3. Highlight the "Why this matches you" explanation box
+4. Show the matched skills (green badges)
+5. Scroll to application tracking table
+
+**Part 2: Employer View (1-2 minutes)**
+1. Open `employer-dashboard.html`
+2. Show Smart Inbox with ranked candidates (92%, 89%, 87%, 84%)
+3. Point out the match breakdown bars (Skills: 95%, Experience: 90%, etc.)
+4. Show the filtering sidebar
+5. Click "Shortlist" button to demonstrate interactivity
+
+See `prototypes/README.md` for complete demo script and tips.
 
 ## Customization
 
