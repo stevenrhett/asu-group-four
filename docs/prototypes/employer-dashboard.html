@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Employer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #718096;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-tab:hover {
+            color: #667eea;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+
+        .btn-filter {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-filter:hover {
+            background: #5a67d8;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .job-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .job-selector h2 {
+            font-size: 1.5rem;
+            color: #2d3748;
+        }
+
+        .job-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #718096;
+        }
+
+        /* Applicants Header */
+        .applicants-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .sort-controls label {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .sort-controls select {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        /* Applicant Card */
+        .applicant-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .applicant-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .applicant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .applicant-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .applicant-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .applicant-details h3 {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .applicant-meta {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .match-score {
+            text-align: right;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0 0 auto;
+        }
+
+        .score-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* Match Breakdown */
+        .match-breakdown {
+            background: #f7fafc;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .match-breakdown h4 {
+            font-size: 0.875rem;
+            color: #4a5568;
+            margin-bottom: 0.75rem;
+        }
+
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .match-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .match-label {
+            color: #718096;
+        }
+
+        .match-value {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .match-bar {
+            width: 100px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .match-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .match-percentage {
+            font-weight: 600;
+            color: #2d3748;
+            min-width: 40px;
+        }
+
+        /* Skills */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            padding: 0.25rem 0.75rem;
+            background: #edf2f7;
+            color: #4a5568;
+            border-radius: 12px;
+            font-size: 0.813rem;
+        }
+
+        .skill-tag.match {
+            background: #c6f6d5;
+            color: #22543d;
+            font-weight: 500;
+        }
+
+        /* Actions */
+        .applicant-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-new {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .status-viewed {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .status-shortlisted {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-interview {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .applicant-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .match-score {
+                text-align: left;
+            }
+
+            .score-circle {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🎯 Job Portal</div>
+            <div class="user-info">
+                <span>TechCorp Inc.</span>
+                <div class="user-avatar">TC</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab">Dashboard</button>
+            <button class="nav-tab active">Smart Inbox</button>
+            <button class="nav-tab">My Job Posts</button>
+            <button class="nav-tab">Analytics</button>
+            <button class="nav-tab">Settings</button>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <h3>🔍 Filter Applicants</h3>
+
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select>
+                        <option>All Statuses</option>
+                        <option>New</option>
+                        <option>Viewed</option>
+                        <option>Shortlisted</option>
+                        <option>Interview Scheduled</option>
+                        <option>Rejected</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Experience Level</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Junior (0-2 years)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Mid (3-5 years)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> Senior (5+ years)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Minimum Match Score</label>
+                    <input type="range" min="0" max="100" value="70">
+                    <div style="text-align: center; font-size: 0.875rem; color: #718096;">70%</div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Required Skills</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> React
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked> TypeScript
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> Python
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox"> FastAPI
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-filter">Apply Filters</button>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Job Selector -->
+                <div class="job-selector">
+                    <div>
+                        <h2>Senior Full Stack Developer</h2>
+                        <div style="font-size: 0.875rem; color: #718096; margin-top: 0.25rem;">
+                            Posted 5 days ago • Remote • Full-time
+                        </div>
+                    </div>
+                    <div class="job-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">New</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Shortlisted</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applicants Header -->
+                <div class="applicants-header">
+                    <h3 style="font-size: 1.1rem;">Top Candidates</h3>
+                    <div class="sort-controls">
+                        <label>Sort by:</label>
+                        <select>
+                            <option>Match Score (High to Low)</option>
+                            <option>Match Score (Low to High)</option>
+                            <option>Date Applied (Newest)</option>
+                            <option>Date Applied (Oldest)</option>
+                            <option>Experience (High to Low)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Applicant 1 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-info">
+                            <div class="applicant-avatar">SJ</div>
+                            <div class="applicant-details">
+                                <h3>Sarah Johnson</h3>
+                                <div class="applicant-meta">
+                                    6 years experience • San Francisco, CA<br>
+                                    Applied 2 hours ago • <span class="status-badge status-new">New</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="match-score">
+                            <div class="score-circle">
+                                <div class="score-number">92%</div>
+                                <div class="score-label">Match</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-breakdown">
+                        <h4>📊 Match Breakdown</h4>
+                        <div class="match-item">
+                            <span class="match-label">Skills Match</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 95%"></div>
+                                </div>
+                                <span class="match-percentage">95%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Experience Level</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 90%"></div>
+                                </div>
+                                <span class="match-percentage">90%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Job Title Similarity</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 88%"></div>
+                                </div>
+                                <span class="match-percentage">88%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skills">
+                        <span class="skill-tag match">React</span>
+                        <span class="skill-tag match">TypeScript</span>
+                        <span class="skill-tag match">Node.js</span>
+                        <span class="skill-tag match">MongoDB</span>
+                        <span class="skill-tag match">FastAPI</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Docker</span>
+                    </div>
+
+                    <div class="applicant-actions">
+                        <button class="btn btn-primary">📄 View Resume</button>
+                        <button class="btn btn-success">✓ Shortlist</button>
+                        <button class="btn btn-primary">📅 Schedule Interview</button>
+                        <button class="btn btn-danger">✕ Reject</button>
+                    </div>
+                </div>
+
+                <!-- Applicant 2 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-info">
+                            <div class="applicant-avatar">MC</div>
+                            <div class="applicant-details">
+                                <h3>Michael Chen</h3>
+                                <div class="applicant-meta">
+                                    7 years experience • Austin, TX<br>
+                                    Applied 5 hours ago • <span class="status-badge status-viewed">Viewed</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="match-score">
+                            <div class="score-circle">
+                                <div class="score-number">89%</div>
+                                <div class="score-label">Match</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-breakdown">
+                        <h4>📊 Match Breakdown</h4>
+                        <div class="match-item">
+                            <span class="match-label">Skills Match</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 92%"></div>
+                                </div>
+                                <span class="match-percentage">92%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Experience Level</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 88%"></div>
+                                </div>
+                                <span class="match-percentage">88%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Job Title Similarity</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="match-percentage">85%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skills">
+                        <span class="skill-tag match">React</span>
+                        <span class="skill-tag match">TypeScript</span>
+                        <span class="skill-tag match">Next.js</span>
+                        <span class="skill-tag">Vue.js</span>
+                        <span class="skill-tag">GraphQL</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">Kubernetes</span>
+                    </div>
+
+                    <div class="applicant-actions">
+                        <button class="btn btn-primary">📄 View Resume</button>
+                        <button class="btn btn-success">✓ Shortlist</button>
+                        <button class="btn btn-primary">📅 Schedule Interview</button>
+                        <button class="btn btn-danger">✕ Reject</button>
+                    </div>
+                </div>
+
+                <!-- Applicant 3 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-info">
+                            <div class="applicant-avatar">AP</div>
+                            <div class="applicant-details">
+                                <h3>Aisha Patel</h3>
+                                <div class="applicant-meta">
+                                    5 years experience • Seattle, WA<br>
+                                    Applied 1 day ago • <span class="status-badge status-shortlisted">Shortlisted</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="match-score">
+                            <div class="score-circle">
+                                <div class="score-number">87%</div>
+                                <div class="score-label">Match</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-breakdown">
+                        <h4>📊 Match Breakdown</h4>
+                        <div class="match-item">
+                            <span class="match-label">Skills Match</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 88%"></div>
+                                </div>
+                                <span class="match-percentage">88%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Experience Level</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="match-percentage">85%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Job Title Similarity</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 87%"></div>
+                                </div>
+                                <span class="match-percentage">87%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skills">
+                        <span class="skill-tag match">React</span>
+                        <span class="skill-tag match">TypeScript</span>
+                        <span class="skill-tag match">Python</span>
+                        <span class="skill-tag match">FastAPI</span>
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">Redis</span>
+                        <span class="skill-tag">Elasticsearch</span>
+                    </div>
+
+                    <div class="applicant-actions">
+                        <button class="btn btn-primary">📄 View Resume</button>
+                        <button class="btn btn-secondary">✓ Shortlisted</button>
+                        <button class="btn btn-primary">📅 Schedule Interview</button>
+                        <button class="btn btn-secondary">↩️ Move to Review</button>
+                    </div>
+                </div>
+
+                <!-- Applicant 4 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-info">
+                            <div class="applicant-avatar">DK</div>
+                            <div class="applicant-details">
+                                <h3>David Kim</h3>
+                                <div class="applicant-meta">
+                                    4 years experience • Boston, MA<br>
+                                    Applied 2 days ago • <span class="status-badge status-interview">Interview Scheduled</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="match-score">
+                            <div class="score-circle">
+                                <div class="score-number">84%</div>
+                                <div class="score-label">Match</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-breakdown">
+                        <h4>📊 Match Breakdown</h4>
+                        <div class="match-item">
+                            <span class="match-label">Skills Match</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="match-percentage">85%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Experience Level</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="match-percentage">80%</span>
+                            </div>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">Job Title Similarity</span>
+                            <div class="match-value">
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" style="width: 86%"></div>
+                                </div>
+                                <span class="match-percentage">86%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fef5e7; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; font-size: 0.875rem;">
+                        <strong>📅 Interview Scheduled:</strong> Friday, Nov 17, 2025 at 2:00 PM PST<br>
+                        <strong>Format:</strong> Technical Interview (1 hour) - Zoom link sent
+                    </div>
+
+                    <div class="skills">
+                        <span class="skill-tag match">React</span>
+                        <span class="skill-tag match">JavaScript</span>
+                        <span class="skill-tag match">Node.js</span>
+                        <span class="skill-tag">Angular</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+
+                    <div class="applicant-actions">
+                        <button class="btn btn-primary">📄 View Resume</button>
+                        <button class="btn btn-primary">📅 Reschedule</button>
+                        <button class="btn btn-danger">✕ Cancel Interview</button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                    <p style="color: #718096;">Showing 4 of 47 applicants • <a href="#" style="color: #667eea; text-decoration: none; font-weight: 500;">Load More</a></p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Add some basic interactivity
+        document.querySelectorAll('.applicant-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('btn')) {
+                    card.style.borderColor = '#667eea';
+                }
+            });
+        });
+
+        // Button interactions
+        document.querySelectorAll('.btn-success').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                alert('Candidate shortlisted! Moving to shortlist queue.');
+            });
+        });
+
+        document.querySelectorAll('.btn-danger').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Are you sure you want to reject this candidate?')) {
+                    alert('Candidate rejected. Email notification sent.');
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            if (btn.textContent.includes('Schedule Interview')) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    alert('Opening interview scheduler...');
+                });
+            } else if (btn.textContent.includes('View Resume')) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    alert('Opening resume viewer...');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

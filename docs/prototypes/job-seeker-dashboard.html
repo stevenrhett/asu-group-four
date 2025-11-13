@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Job Seeker Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Profile Banner */
+        .profile-banner {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .profile-details h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-meta {
+            color: #718096;
+            font-size: 0.875rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Job Card */
+        .job-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .job-info {
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        .job-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-name {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.813rem;
+            color: #718096;
+        }
+
+        .match-badge {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Match Explanation */
+        .match-explanation {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .match-explanation h4 {
+            font-size: 0.875rem;
+            color: #4a5568;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .match-reason {
+            font-size: 0.875rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .match-reason:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: 600;
+        }
+
+        .match-reason:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Skills */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            padding: 0.25rem 0.75rem;
+            background: #edf2f7;
+            color: #4a5568;
+            border-radius: 12px;
+            font-size: 0.813rem;
+        }
+
+        .skill-tag.match {
+            background: #c6f6d5;
+            color: #22543d;
+            font-weight: 500;
+        }
+
+        /* Actions */
+        .job-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Applications Table */
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .applications-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: #f7fafc;
+            color: #4a5568;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .applications-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.875rem;
+        }
+
+        .applications-table tr:hover {
+            background: #f7fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-applied {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .status-viewed {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-interview {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .status-rejected {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            color: #718096;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🎯 Job Portal</div>
+            <div class="user-info">
+                <span>John Doe</span>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Profile Banner -->
+        <div class="profile-banner">
+            <div class="profile-info">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-details">
+                    <h2>John Doe</h2>
+                    <div class="profile-meta">
+                        Full Stack Developer • 5 years experience<br>
+                        San Francisco, CA • Open to Remote
+                    </div>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Recommendations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Applied</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Interviews</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Jobs -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🎯 Recommended for You</h2>
+                <button class="btn btn-secondary">⚙️ Adjust Preferences</button>
+            </div>
+
+            <!-- Job 1 -->
+            <div class="job-card">
+                <div class="job-header">
+                    <div style="display: flex; align-items: start; flex: 1;">
+                        <div class="company-logo">TC</div>
+                        <div class="job-info">
+                            <div class="job-title">Senior Full Stack Engineer</div>
+                            <div class="company-name">TechCorp Inc.</div>
+                            <div class="job-meta">
+                                <span>📍 San Francisco, CA (Remote)</span>
+                                <span>💼 Full-time</span>
+                                <span>💰 $140K - $180K</span>
+                                <span>⏰ Posted 2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="match-badge">92% Match</div>
+                </div>
+
+                <div class="match-explanation">
+                    <h4>💡 Why this job matches you:</h4>
+                    <div class="match-reason">Your skills (React, TypeScript, Node.js) align perfectly with requirements</div>
+                    <div class="match-reason">Your 5 years of experience matches the senior level requirement</div>
+                    <div class="match-reason">Job title similarity: "Full Stack Engineer" → "Senior Full Stack Engineer"</div>
+                    <div class="match-reason">Location preference match: You're open to San Francisco roles</div>
+                </div>
+
+                <div class="skills">
+                    <span class="skill-tag match">React</span>
+                    <span class="skill-tag match">TypeScript</span>
+                    <span class="skill-tag match">Node.js</span>
+                    <span class="skill-tag match">MongoDB</span>
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Kubernetes</span>
+                </div>
+
+                <p style="color: #4a5568; font-size: 0.875rem; margin-bottom: 1rem;">
+                    We're looking for a Senior Full Stack Engineer to join our growing team. You'll work on building scalable web applications using modern technologies...
+                </p>
+
+                <div class="job-actions">
+                    <button class="btn btn-primary">🚀 Quick Apply</button>
+                    <button class="btn btn-secondary">📄 View Details</button>
+                    <button class="btn btn-secondary">💾 Save</button>
+                    <button class="btn btn-secondary">👎 Not Interested</button>
+                </div>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="job-card">
+                <div class="job-header">
+                    <div style="display: flex; align-items: start; flex: 1;">
+                        <div class="company-logo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">IN</div>
+                        <div class="job-info">
+                            <div class="job-title">Lead Software Engineer</div>
+                            <div class="company-name">InnovateLabs</div>
+                            <div class="job-meta">
+                                <span>📍 Remote (US)</span>
+                                <span>💼 Full-time</span>
+                                <span>💰 $150K - $190K</span>
+                                <span>⏰ Posted 4 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="match-badge">88% Match</div>
+                </div>
+
+                <div class="match-explanation">
+                    <h4>💡 Why this job matches you:</h4>
+                    <div class="match-reason">Strong skills overlap: React, Python, and API development</div>
+                    <div class="match-reason">Your experience level qualifies for lead position</div>
+                    <div class="match-reason">Remote work matches your preferences</div>
+                </div>
+
+                <div class="skills">
+                    <span class="skill-tag match">React</span>
+                    <span class="skill-tag match">Python</span>
+                    <span class="skill-tag match">FastAPI</span>
+                    <span class="skill-tag">Django</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                    <span class="skill-tag">Redis</span>
+                </div>
+
+                <p style="color: #4a5568; font-size: 0.875rem; margin-bottom: 1rem;">
+                    Join our innovative team as a Lead Software Engineer. You'll architect and build cutting-edge products that serve millions of users...
+                </p>
+
+                <div class="job-actions">
+                    <button class="btn btn-primary">🚀 Quick Apply</button>
+                    <button class="btn btn-secondary">📄 View Details</button>
+                    <button class="btn btn-secondary">💾 Save</button>
+                    <button class="btn btn-secondary">👎 Not Interested</button>
+                </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="job-card">
+                <div class="job-header">
+                    <div style="display: flex; align-items: start; flex: 1;">
+                        <div class="company-logo" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">DS</div>
+                        <div class="job-info">
+                            <div class="job-title">Full Stack Developer</div>
+                            <div class="company-name">DataStream Solutions</div>
+                            <div class="job-meta">
+                                <span>📍 Austin, TX</span>
+                                <span>💼 Full-time</span>
+                                <span>💰 $130K - $160K</span>
+                                <span>⏰ Posted 1 week ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="match-badge">85% Match</div>
+                </div>
+
+                <div class="match-explanation">
+                    <h4>💡 Why this job matches you:</h4>
+                    <div class="match-reason">Your full stack experience aligns with role requirements</div>
+                    <div class="match-reason">Key skills match: React, Node.js, TypeScript</div>
+                    <div class="match-reason">Similar company size preference (Startup/Medium)</div>
+                </div>
+
+                <div class="skills">
+                    <span class="skill-tag match">React</span>
+                    <span class="skill-tag match">Node.js</span>
+                    <span class="skill-tag match">TypeScript</span>
+                    <span class="skill-tag">Vue.js</span>
+                    <span class="skill-tag">GraphQL</span>
+                    <span class="skill-tag">MySQL</span>
+                </div>
+
+                <p style="color: #4a5568; font-size: 0.875rem; margin-bottom: 1rem;">
+                    We're building next-generation data analytics tools. As a Full Stack Developer, you'll work across our entire technology stack...
+                </p>
+
+                <div class="job-actions">
+                    <button class="btn btn-primary">🚀 Quick Apply</button>
+                    <button class="btn btn-secondary">📄 View Details</button>
+                    <button class="btn btn-secondary">💾 Save</button>
+                    <button class="btn btn-secondary">👎 Not Interested</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Applications -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📋 My Applications</h2>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active">All (12)</button>
+                <button class="tab">Applied (5)</button>
+                <button class="tab">Viewed (4)</button>
+                <button class="tab">Interview (3)</button>
+                <button class="tab">Rejected (0)</button>
+            </div>
+
+            <table class="applications-table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Applied Date</th>
+                        <th>Status</th>
+                        <th>Match</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Senior Backend Engineer</strong></td>
+                        <td>Cloudify Inc.</td>
+                        <td>Nov 10, 2025</td>
+                        <td><span class="status-badge status-interview">Interview Scheduled</span></td>
+                        <td>91%</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Full Stack Developer</strong></td>
+                        <td>WebWorks Co.</td>
+                        <td>Nov 9, 2025</td>
+                        <td><span class="status-badge status-viewed">Under Review</span></td>
+                        <td>87%</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Software Engineer III</strong></td>
+                        <td>MegaCorp Systems</td>
+                        <td>Nov 8, 2025</td>
+                        <td><span class="status-badge status-interview">Phone Screen</span></td>
+                        <td>89%</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>React Developer</strong></td>
+                        <td>UI Masters</td>
+                        <td>Nov 7, 2025</td>
+                        <td><span class="status-badge status-applied">Application Submitted</span></td>
+                        <td>84%</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lead Engineer</strong></td>
+                        <td>TechStart Ventures</td>
+                        <td>Nov 6, 2025</td>
+                        <td><span class="status-badge status-viewed">Under Review</span></td>
+                        <td>90%</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem;">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.job-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('btn')) {
+                    console.log('Job card clicked');
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (btn.textContent.includes('Quick Apply')) {
+                    alert('Opening quick apply form...\n\nYour resume and profile will be automatically submitted!');
+                }
+            });
+        });
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
