@@ -215,8 +215,6 @@ export default function HomePage() {
     setAuthMessage(null);
     setAuthError(null);
 
-    console.log("Form submitted", { mode, email, password: "***" });
-
     const trimmedEmail = email.trim().toLowerCase();
     if (!trimmedEmail || !password) {
       setAuthError("Enter both email and password.");
@@ -224,26 +222,19 @@ export default function HomePage() {
     }
 
     try {
-      console.log("Starting auth flow, mode:", mode, "API_BASE:", API_BASE);
-      
       if (mode === "register") {
-        console.log("Making register request...");
         const registerResponse = await fetch(`${API_BASE}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmedEmail, password, role: registerRole }),
         });
-        console.log("Register response status:", registerResponse.status);
         if (!registerResponse.ok) {
           const body = await registerResponse.json().catch(() => null);
-          console.error("Register failed:", body);
           throw new Error(body?.detail ?? "Unable to register. Try logging in.");
         }
-        console.log("Registration successful");
         setAuthMessage("Registration successful. Logging you in…");
       }
 
-      console.log("Making login request...");
       const loginResponse = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -252,31 +243,23 @@ export default function HomePage() {
           password,
         }).toString(),
       });
-      console.log("Login response status:", loginResponse.status, "ok:", loginResponse.ok);
 
       if (!loginResponse.ok) {
         const body = await loginResponse.json().catch(() => null);
-        console.error("Login failed:", body);
         throw new Error(body?.detail ?? "Login failed. Check credentials.");
       }
 
-      console.log("Parsing login response...");
       const payload = (await loginResponse.json()) as { access_token: string };
-      console.log("Login successful, got payload:", { hasToken: !!payload.access_token });
-      console.log("Setting token and role");
       
       // Save token to localStorage for persistence
       localStorage.setItem("token", payload.access_token);
       
       setToken(payload.access_token);
       const decodedRole = decodeRoleFromToken(payload.access_token);
-      console.log("Decoded role:", decodedRole);
       setUserRole(decodedRole);
       setAuthMessage(mode === "register" ? "Registered and logged in!" : "Logged in successfully.");
-      console.log("Auth complete, token set:", !!payload.access_token);
       
       if (decodedRole === "seeker") {
-        console.log("Setting up seeker UI");
         setRecommendations([]);
         setRecommendationError(null);
         setProfile(null);
@@ -284,20 +267,13 @@ export default function HomePage() {
         // Auto-fetch recommendations if user has a profile
         setTimeout(() => fetchRecommendations(), 500);
       } else if (decodedRole === "employer") {
-        console.log("Setting up employer UI");
         setProfile(null);
         setRecommendations([]);
         await fetchInbox("all", payload.access_token, decodedRole);
       } else {
-        console.log("Role not recognized:", decodedRole);
         setAuthMessage("Logged in. Role not recognized; limited features available.");
       }
     } catch (error) {
-      console.error("!!!!!!! AUTH ERROR CAUGHT !!!!!!!");
-      console.error("Error type:", typeof error);
-      console.error("Error object:", error);
-      console.error("Error message:", error instanceof Error ? error.message : String(error));
-      console.error("Error stack:", error instanceof Error ? error.stack : "no stack");
       setAuthError(error instanceof Error ? error.message : "Unexpected auth error.");
       setToken(null);
       setUserRole(null);
@@ -425,7 +401,6 @@ export default function HomePage() {
   }
 
   // Not authenticated - show auth form
-  console.log("Render - token exists:", !!token, "userRole:", userRole);
   if (!token) {
     return (
       <AuthForm
