@@ -5,6 +5,7 @@ motor
 pymongo==4.11.1
 pydantic
 pydantic-settings
+email-validator
 python-jose
 passlib[bcrypt]
 bcrypt<5.0.0  # Pin to < 5.0.0 for compatibility with passlib 1.7.4
