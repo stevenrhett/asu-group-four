@@ -10,7 +10,7 @@ from app.core.security import verify_password
 from app.models.user import User, UserPublic, UserUpdate, UserDeleteRequest
 from app.models.profile import Profile
 from app.models.application import Application
-from app.models.event import EventLog, EventCreate
+from app.models.event import EventLog
 
 router = APIRouter()
 
