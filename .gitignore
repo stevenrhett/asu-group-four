@@ -46,6 +46,8 @@ Thumbs.db
 backend/storage/
 frontend/inspect-ui*.ts
 /tmp/
+.backend.pid
+.frontend.pid
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
