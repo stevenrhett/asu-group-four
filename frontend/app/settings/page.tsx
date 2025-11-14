@@ -81,18 +81,12 @@ export default function SettingsPage() {
     setLoading(true);
     setError(null);
 
-    console.log("Fetching profile from:", `${API_BASE}/users/me`);
-    console.log("Token present:", !!authToken);
-    console.log("Token length:", authToken?.length || 0);
-
     try {
       const response = await fetch(`${API_BASE}/users/me`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-
-      console.log("Profile fetch response status:", response.status);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -105,13 +99,11 @@ export default function SettingsPage() {
       }
 
       const data = await response.json();
-      console.log("Profile loaded successfully");
       setProfile(data);
       setPhone(data.phone || "");
       setLinkedinUrl(data.linkedin_url || "");
       setWebsiteUrl(data.website_url || "");
     } catch (err) {
-      console.error("Profile fetch error:", err);
       const errorMessage = err instanceof Error ? err.message : "Failed to load profile";
       setError(errorMessage);
       
