@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search & Filters - Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f9fafb; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h1 { color: #1f2937; margin-bottom: 20px; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"], input[type="number"], select { padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+        input[type="text"] { flex: 1; }
+        button { padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        button:hover { background: #1d4ed8; }
+        .main-content { display: flex; gap: 20px; }
+        .filters { width: 280px; background: white; padding: 20px; border-radius: 8px; height: fit-content; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .filter-group { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e7eb; }
+        .filter-group:last-child { border-bottom: none; }
+        .filter-group h3 { font-size: 14px; margin-bottom: 12px; color: #374151; }
+        .filter-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #4b5563; cursor: pointer; }
+        .filter-group input[type="checkbox"], .filter-group input[type="radio"] { margin-right: 8px; }
+        .results { flex: 1; }
+        .results-header { background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .job-card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s; }
+        .job-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.15); border-left: 4px solid #2563eb; }
+        .job-title { font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 8px; }
+        .job-company { color: #6b7280; font-size: 14px; margin-bottom: 12px; }
+        .job-details { display: flex; gap: 15px; flex-wrap: wrap; font-size: 13px; color: #4b5563; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-remote { background: #dcfce7; color: #166534; }
+        .badge-hybrid { background: #dbeafe; color: #1e40af; }
+        .badge-onsite { background: #f3f4f6; color: #374151; }
+        .badge-easy { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        .loading { text-align: center; padding: 40px; color: #6b7280; }
+        .error { background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 6px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Job Search & Advanced Filters</h1>
+            <div class="search-bar">
+                <input type="text" id="searchKeywords" placeholder="Job title, keywords, or company" />
+                <input type="text" id="searchLocation" placeholder="City or remote" />
+                <button onclick="searchJobs()">Search</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Filters Sidebar -->
+            <div class="filters">
+                <h2 style="margin-bottom: 20px; font-size: 16px;">Filters</h2>
+                
+                <div class="filter-group">
+                    <h3>Quick Filters</h3>
+                    <label><input type="checkbox" id="remoteOnly" onchange="searchJobs()"> Remote only</label>
+                    <label><input type="checkbox" id="easyApply" onchange="searchJobs()"> Easy Apply</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Salary Range</h3>
+                    <input type="number" id="salaryMin" placeholder="Min (e.g., 80000)" style="width: 100%; margin-bottom: 8px;">
+                    <input type="number" id="salaryMax" placeholder="Max (e.g., 150000)" style="width: 100%;">
+                    <button onclick="searchJobs()" style="width: 100%; margin-top: 10px; font-size: 13px; padding: 8px;">Apply</button>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Date Posted</h3>
+                    <label><input type="radio" name="datePosted" value="24h" onchange="searchJobs()"> Last 24 hours</label>
+                    <label><input type="radio" name="datePosted" value="7d" onchange="searchJobs()"> Last 7 days</label>
+                    <label><input type="radio" name="datePosted" value="30d" onchange="searchJobs()"> Last 30 days</label>
+                    <label><input type="radio" name="datePosted" value="any" checked onchange="searchJobs()"> Any time</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Experience Level</h3>
+                    <label><input type="checkbox" value="entry" onchange="searchJobs()" class="exp-level"> Entry Level</label>
+                    <label><input type="checkbox" value="mid" onchange="searchJobs()" class="exp-level"> Mid-Level</label>
+                    <label><input type="checkbox" value="senior" onchange="searchJobs()" class="exp-level"> Senior</label>
+                    <label><input type="checkbox" value="lead" onchange="searchJobs()" class="exp-level"> Lead/Principal</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Work Type</h3>
+                    <label><input type="checkbox" value="remote" onchange="searchJobs()" class="work-type"> Remote</label>
+                    <label><input type="checkbox" value="hybrid" onchange="searchJobs()" class="work-type"> Hybrid</label>
+                    <label><input type="checkbox" value="onsite" onchange="searchJobs()" class="work-type"> On-site</label>
+                </div>
+
+                <button onclick="clearFilters()" style="width: 100%; background: #6b7280; margin-top: 10px;">Clear All Filters</button>
+            </div>
+
+            <!-- Results -->
+            <div class="results">
+                <div class="results-header">
+                    <strong id="resultsCount">Loading...</strong> jobs found
+                </div>
+                <div id="jobResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function searchJobs() {
+            const resultsDiv = document.getElementById('jobResults');
+            resultsDiv.innerHTML = '<div class="loading">🔍 Searching jobs...</div>';
+
+            // Build query parameters
+            const params = new URLSearchParams();
+            
+            const keywords = document.getElementById('searchKeywords').value;
+            const location = document.getElementById('searchLocation').value;
+            if (keywords) params.append('q', keywords);
+            if (location) params.append('location', location);
+
+            if (document.getElementById('remoteOnly').checked) params.append('remote_only', 'true');
+            if (document.getElementById('easyApply').checked) params.append('easy_apply', 'true');
+
+            const salaryMin = document.getElementById('salaryMin').value;
+            const salaryMax = document.getElementById('salaryMax').value;
+            if (salaryMin) params.append('salary_min', salaryMin);
+            if (salaryMax) params.append('salary_max', salaryMax);
+
+            const datePosted = document.querySelector('input[name="datePosted"]:checked').value;
+            if (datePosted !== 'any') params.append('posted_within', datePosted);
+
+            const expLevels = Array.from(document.querySelectorAll('.exp-level:checked')).map(cb => cb.value);
+            if (expLevels.length) params.append('experience_levels', expLevels.join(','));
+
+            const workTypes = Array.from(document.querySelectorAll('.work-type:checked')).map(cb => cb.value);
+            if (workTypes.length) params.append('work_types', workTypes.join(','));
+
+            params.append('page_size', '20');
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/v1/jobs/search?${params}`);
+                const data = await response.json();
+
+                if (data.detail) {
+                    resultsDiv.innerHTML = `<div class="error">Error: ${data.detail}</div>`;
+                    return;
+                }
+
+                document.getElementById('resultsCount').textContent = data.pagination.total_results;
+
+                if (data.jobs.length === 0) {
+                    resultsDiv.innerHTML = '<div class="loading">No jobs found matching your criteria</div>';
+                    return;
+                }
+
+                resultsDiv.innerHTML = data.jobs.map(job => `
+                    <div class="job-card">
+                        <div class="job-title">${job.title}</div>
+                        <div class="job-company">
+                            ${job.company_name || 'Company'} 
+                            ${job.company_rating ? `⭐ ${job.company_rating.toFixed(1)}` : ''}
+                        </div>
+                        <div class="job-details">
+                            <span>📍 ${job.location || 'Location not specified'}</span>
+                            <span class="badge badge-${job.work_type}">${job.work_type}</span>
+                            ${job.easy_apply ? '<span class="badge badge-easy">Easy Apply</span>' : ''}
+                            ${job.salary_min && job.salary_max ? 
+                                `<span>💰 $${(job.salary_min/1000).toFixed(0)}k - $${(job.salary_max/1000).toFixed(0)}k</span>` : ''}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 13px; color: #6b7280;">
+                            ${job.skills.slice(0, 5).map(skill => `<span style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px; margin-right: 5px;">${skill}</span>`).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('searchKeywords').value = '';
+            document.getElementById('searchLocation').value = '';
+            document.getElementById('remoteOnly').checked = false;
+            document.getElementById('easyApply').checked = false;
+            document.getElementById('salaryMin').value = '';
+            document.getElementById('salaryMax').value = '';
+            document.querySelector('input[value="any"]').checked = true;
+            document.querySelectorAll('.exp-level').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.work-type').forEach(cb => cb.checked = false);
+            searchJobs();
+        }
+
+        // Load jobs on page load
+        searchJobs();
+    </script>
+</body>
+</html>
+

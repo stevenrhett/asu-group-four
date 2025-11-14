@@ -18,6 +18,37 @@ from app.schemas.events import BaseEvent, EventType, EventSeverity
 router = APIRouter()
 
 
+def job_to_response(job: Job) -> JobResponse:
+    """Convert Job document to JobResponse schema."""
+    return JobResponse(
+        id=str(job.id),
+        title=job.title,
+        description=job.description,
+        skills=job.skills,
+        employer_id=job.employer_id,
+        status=job.status,
+        location=job.location,
+        city=job.city,
+        state=job.state,
+        country=job.country,
+        work_type=job.work_type,
+        job_type=job.job_type,
+        experience_level=job.experience_level,
+        easy_apply=job.easy_apply,
+        salary_min=job.salary_min,
+        salary_max=job.salary_max,
+        salary_currency=job.salary_currency,
+        company_name=job.company_name,
+        company_rating=job.company_rating,
+        company_size=job.company_size,
+        industry=job.industry,
+        posted_at=job.posted_at,
+        created_at=job.created_at,
+        updated_at=job.updated_at,
+        archived_at=job.archived_at
+    )
+
+
 @router.get("/", response_model=List[JobResponse])
 async def list_jobs(
     status: Optional[JobStatus] = Query(None, description="Filter by job status"),
@@ -42,21 +73,7 @@ async def list_jobs(
     
     jobs = await Job.find(query).skip(skip).limit(limit).to_list()
     
-    return [
-        JobResponse(
-            id=str(job.id),
-            title=job.title,
-            description=job.description,
-            location=job.location,
-            skills=job.skills,
-            employer_id=job.employer_id,
-            status=job.status,
-            created_at=job.created_at,
-            updated_at=job.updated_at,
-            archived_at=job.archived_at
-        )
-        for job in jobs
-    ]
+    return [job_to_response(job) for job in jobs]
 
 
 @router.get("/{job_id}", response_model=JobResponse)
@@ -66,18 +83,7 @@ async def get_job(job_id: str):
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     
-    return JobResponse(
-        id=str(job.id),
-        title=job.title,
-        description=job.description,
-        location=job.location,
-        skills=job.skills,
-        employer_id=job.employer_id,
-        status=job.status,
-        created_at=job.created_at,
-        updated_at=job.updated_at,
-        archived_at=job.archived_at
-    )
+    return job_to_response(job)
 
 
 @router.post("/", response_model=JobResponse, status_code=201)
@@ -112,18 +118,7 @@ async def create_job(
         )
     )
     
-    return JobResponse(
-        id=str(job.id),
-        title=job.title,
-        description=job.description,
-        location=job.location,
-        skills=job.skills,
-        employer_id=job.employer_id,
-        status=job.status,
-        created_at=job.created_at,
-        updated_at=job.updated_at,
-        archived_at=job.archived_at
-    )
+    return job_to_response(job)
 
 
 @router.put("/{job_id}", response_model=JobResponse)
@@ -165,18 +160,7 @@ async def update_job(
             )
         )
     
-    return JobResponse(
-        id=str(job.id),
-        title=job.title,
-        description=job.description,
-        location=job.location,
-        skills=job.skills,
-        employer_id=job.employer_id,
-        status=job.status,
-        created_at=job.created_at,
-        updated_at=job.updated_at,
-        archived_at=job.archived_at
-    )
+    return job_to_response(job)
 
 
 @router.patch("/{job_id}/archive", response_model=JobResponse)
@@ -218,18 +202,7 @@ async def archive_job(
         )
     )
     
-    return JobResponse(
-        id=str(job.id),
-        title=job.title,
-        description=job.description,
-        location=job.location,
-        skills=job.skills,
-        employer_id=job.employer_id,
-        status=job.status,
-        created_at=job.created_at,
-        updated_at=job.updated_at,
-        archived_at=job.archived_at
-    )
+    return job_to_response(job)
 
 
 @router.patch("/{job_id}/unarchive", response_model=JobResponse)
@@ -271,18 +244,7 @@ async def unarchive_job(
         )
     )
     
-    return JobResponse(
-        id=str(job.id),
-        title=job.title,
-        description=job.description,
-        location=job.location,
-        skills=job.skills,
-        employer_id=job.employer_id,
-        status=job.status,
-        created_at=job.created_at,
-        updated_at=job.updated_at,
-        archived_at=job.archived_at
-    )
+    return job_to_response(job)
 
 
 @router.delete("/{job_id}", status_code=204)
