@@ -31,7 +31,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (token) {
         try {
           const response = await authAPI.me()
-          setUser(response.data)
+          if (response && response.data) {
+            setUser(response.data)
+          } else {
+            throw new Error('Invalid response from server')
+          }
         } catch (error) {
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
@@ -39,14 +43,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       setLoading(false)
     }
-    
+
     checkAuth()
   }, [])
 
   const login = async (email: string, password: string) => {
     const response = await authAPI.login({ email, password })
+    if (!response || !response.data) {
+      throw new Error('Invalid response from server')
+    }
     const { access_token, refresh_token, user } = response.data
-    
+
+    if (!access_token || !refresh_token || !user) {
+      throw new Error('Missing required authentication data')
+    }
+
     localStorage.setItem('access_token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
     setUser(user)
@@ -54,8 +65,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, role: string) => {
     const response = await authAPI.register({ email, password, role })
+    if (!response || !response.data) {
+      throw new Error('Invalid response from server')
+    }
     const { access_token, refresh_token, user } = response.data
-    
+
+    if (!access_token || !refresh_token || !user) {
+      throw new Error('Missing required authentication data')
+    }
+
     localStorage.setItem('access_token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
     setUser(user)

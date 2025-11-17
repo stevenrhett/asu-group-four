@@ -41,6 +41,8 @@ export default function SearchBar({ initialQuery = '', initialLocation = '', onS
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          aria-label="Search for jobs by title, keywords, or company"
+          id="job-search-query"
         />
       </div>
       
@@ -61,6 +63,8 @@ export default function SearchBar({ initialQuery = '', initialLocation = '', onS
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          aria-label="Search by location or remote"
+          id="job-search-location"
         />
       </div>
       
@@ -68,6 +72,7 @@ export default function SearchBar({ initialQuery = '', initialLocation = '', onS
       <button
         type="submit"
         className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        aria-label="Search for jobs"
       >
         Search
       </button>
@@ -79,8 +84,9 @@ export default function SearchBar({ initialQuery = '', initialLocation = '', onS
           onClick={handleClear}
           className="px-4 py-3 text-gray-600 hover:text-gray-900 focus:outline-none"
           title="Clear search"
+          aria-label="Clear search filters"
         >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>

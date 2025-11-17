@@ -31,20 +31,27 @@ export default function JobCard({ job, onClick }: JobCardProps) {
   
   // Format posted date
   const formatPostedDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 24) {
-      return `${diffInHours} hours ago`;
-    } else if (diffInHours < 48) {
-      return '1 day ago';
-    } else if (diffInHours < 168) {
-      return `${Math.floor(diffInHours / 24)} days ago`;
-    } else if (diffInHours < 720) {
-      return `${Math.floor(diffInHours / 168)} weeks ago`;
-    } else {
+    if (!dateString) return 'Recently posted';
+
+    try {
+      const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return 'Recently posted';
+      }
+
+      const now = new Date();
+      const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+
+      if (diffInHours < 0) return 'Recently posted'; // Future date protection
+      if (diffInHours < 1) return 'Just now';
+      if (diffInHours < 24) return `${diffInHours} hours ago`;
+      if (diffInHours < 48) return '1 day ago';
+      if (diffInHours < 168) return `${Math.floor(diffInHours / 24)} days ago`;
+      if (diffInHours < 720) return `${Math.floor(diffInHours / 168)} weeks ago`;
       return `${Math.floor(diffInHours / 720)} months ago`;
+    } catch (error) {
+      return 'Recently posted';
     }
   };
   
@@ -128,15 +135,17 @@ export default function JobCard({ job, onClick }: JobCardProps) {
       )}
       
       {/* Skills */}
-      {job.skills && job.skills.length > 0 && (
+      {job.skills && Array.isArray(job.skills) && job.skills.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {job.skills.slice(0, 5).map((skill, idx) => (
-            <span
-              key={idx}
-              className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded border border-gray-200"
-            >
-              {skill}
-            </span>
+            skill ? (
+              <span
+                key={idx}
+                className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded border border-gray-200"
+              >
+                {skill}
+              </span>
+            ) : null
           ))}
           {job.skills.length > 5 && (
             <span className="px-2 py-1 text-gray-500 text-xs">

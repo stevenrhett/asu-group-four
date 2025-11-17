@@ -27,7 +27,31 @@ export default function JobResults({ jobs, loading, currentPage, totalPages, onP
   }
   
   if (jobs.length === 0) {
-    return null;
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+        <svg
+          className="mx-auto h-12 w-12 text-gray-400 mb-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs found</h3>
+        <p className="text-gray-600 mb-4">
+          We couldn't find any jobs matching your search criteria. Try adjusting your filters or search terms.
+        </p>
+        <p className="text-sm text-gray-500">
+          Tip: Try using broader search terms or removing some filters to see more results.
+        </p>
+      </div>
+    );
   }
   
   // Generate page numbers to display
