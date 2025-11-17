@@ -7,7 +7,7 @@ from app.models.user import UserRole
 # Request Schemas
 class UserRegister(BaseModel):
     email: EmailStr
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8, max_length=72, description="Password must be between 8 and 72 characters")
     role: UserRole
 
 
@@ -22,7 +22,7 @@ class PasswordReset(BaseModel):
 
 class PasswordChange(BaseModel):
     old_password: str
-    new_password: str = Field(..., min_length=8)
+    new_password: str = Field(..., min_length=8, max_length=72, description="Password must be between 8 and 72 characters")
 
 
 # Response Schemas

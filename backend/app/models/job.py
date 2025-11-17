@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 from beanie import Document
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, ConfigDict
 from bson import ObjectId
 from enum import Enum
 
@@ -37,6 +37,8 @@ class JobLocation(BaseModel):
 
 
 class Job(Document):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     employer_id: ObjectId
     
     # Job Details

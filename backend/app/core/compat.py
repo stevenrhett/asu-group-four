@@ -9,6 +9,10 @@ from __future__ import annotations
 
 import warnings
 
-from pydantic.warnings import PydanticDeprecatedSince211
-
-warnings.simplefilter("ignore", PydanticDeprecatedSince211)
+try:
+    from pydantic.warnings import PydanticDeprecatedSince211
+    warnings.simplefilter("ignore", PydanticDeprecatedSince211)
+except ImportError:
+    # PydanticDeprecatedSince211 may not exist in all Pydantic versions
+    # This is fine - we'll just skip the warning suppression
+    pass

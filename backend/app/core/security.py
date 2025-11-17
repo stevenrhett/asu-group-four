@@ -13,13 +13,39 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
 
+def _truncate_password(password: str) -> str:
+    """Truncate password to 72 bytes maximum for bcrypt compatibility"""
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) <= 72:
+        return password
+    
+    # Truncate to 72 bytes, ensuring we don't break UTF-8 characters
+    truncated = password_bytes[:72]
+    # Remove any incomplete UTF-8 sequences at the end
+    while truncated:
+        try:
+            return truncated.decode('utf-8')
+        except UnicodeDecodeError:
+            truncated = truncated[:-1]
+    
+    # Fallback: return empty string if we can't decode
+    return ""
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash"""
+    # Bcrypt has a 72-byte limit, truncate if necessary
+    plain_password = _truncate_password(plain_password)
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password"""
+    """Hash a password
+    
+    Bcrypt has a 72-byte limit, so we truncate longer passwords
+    """
+    # Bcrypt has a 72-byte limit, truncate if necessary
+    password = _truncate_password(password)
     return pwd_context.hash(password)
 
 
@@ -80,7 +106,7 @@ async def get_current_user_id(credentials: HTTPAuthorizationCredentials = Depend
     return user_id
 
 
-async def require_role(required_role: str):
+def require_role(required_role: str):
     """Dependency to check user role"""
     async def role_checker(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
         token = credentials.credentials
