@@ -9,7 +9,7 @@ interface ModalProps {
   onConfirm?: () => void;
   confirmText?: string;
   cancelText?: string;
-  confirmVariant?: 'primary' | 'danger' | 'success';
+  confirmVariant?: 'primary' | 'danger' | 'success' | 'secondary';
   isLoading?: boolean;
 }
 
