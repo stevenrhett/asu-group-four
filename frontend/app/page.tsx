@@ -49,21 +49,18 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold text-center mb-12">Why Choose JobPortal?</h2>
         <div className="grid md:grid-cols-3 gap-8">
           <div className="card text-center">
-            <div className="text-4xl mb-4">🤖</div>
             <h3 className="text-xl font-semibold mb-2">AI-Powered Matching</h3>
             <p className="text-gray-600">
               Advanced algorithms match candidates with the perfect opportunities
             </p>
           </div>
           <div className="card text-center">
-            <div className="text-4xl mb-4">⚡</div>
             <h3 className="text-xl font-semibold mb-2">Quick & Easy</h3>
             <p className="text-gray-600">
               Apply to jobs or review candidates with just a few clicks
             </p>
           </div>
           <div className="card text-center">
-            <div className="text-4xl mb-4">📊</div>
             <h3 className="text-xl font-semibold mb-2">Real-time Updates</h3>
             <p className="text-gray-600">
               Track application status and get instant notifications
