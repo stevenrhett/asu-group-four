@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <story id="ST-016" epic="Onboarding & Profile" title="Account Settings & Profile Management">
+    <as_a>Job Seeker or Employer</as_a>
+    <i_want>dedicated account settings page where I can view/manage my account information, update contact details, and manage account deletion</i_want>
+    <so_that>I have control over my personal information and can comply with GDPR data management requirements</so_that>
+  </story>
+
+  <acceptance_criteria>
+    <criterion id="AC-1">Given a logged-in user, when they navigate to /settings, then they see their email, contact info (phone, LinkedIn, website/portfolio), and account age displayed</criterion>
+    <criterion id="AC-2">Given a user on the settings page, when they update their contact information (phone, LinkedIn, website/portfolio), then the changes are saved and confirmed</criterion>
+    <criterion id="AC-3">Given a user clicks "Deactivate Account", when they confirm in a modal, then their account status is set to "inactive" and they are logged out (can be reactivated by support/login)</criterion>
+    <criterion id="AC-4">Given a user clicks "Delete Account Permanently", when they confirm with a final warning about GDPR data deletion, then all personal data is permanently removed, applications are anonymized, user is logged out, and action is logged for audit trail</criterion>
+    <criterion id="AC-5">Given a job seeker on settings, when they upload a new resume (PDF/DOCX), then the old resume file is replaced and the profile is re-parsed with updated data</criterion>
+    <criterion id="AC-6">Given an employer on settings, when they view the page, then they see employer-specific settings section (detailed scope TBD)</criterion>
+  </acceptance_criteria>
+
+  <tasks>
+    <task id="1" status="pending">Design settings page UI/UX (wireframe) - mobile responsive</task>
+    <task id="2" status="pending">Backend: Extend User model with contact fields and is_active flag</task>
+    <task id="3" status="pending">Backend: Create GET/PATCH /api/users/me endpoints</task>
+    <task id="4" status="pending">Backend: Implement soft delete (deactivate) endpoint</task>
+    <task id="5" status="pending">Backend: Implement GDPR-compliant hard delete with cascading logic</task>
+    <task id="6" status="pending">Backend: Add audit logging for deletions</task>
+    <task id="7" status="pending">Frontend: Build settings page layout (role-aware sections)</task>
+    <task id="8" status="pending">Frontend: Contact info form with validation (URL format, phone format)</task>
+    <task id="9" status="pending">Frontend: Implement deactivate confirmation modal</task>
+    <task id="10" status="pending">Frontend: Implement permanent delete warning modal (red/danger theme)</task>
+    <task id="11" status="pending">Frontend: Integrate resume re-upload for seekers (reuse ST-002 component)</task>
+    <task id="12" status="pending">Frontend: Add employer settings placeholder section</task>
+    <task id="13" status="pending">Unit tests for all new endpoints</task>
+    <task id="14" status="pending">Integration test for GDPR deletion cascade</task>
+    <task id="15" status="pending">E2E test for full settings flow (seeker and employer)</task>
+    <task id="16" status="pending">GDPR compliance review and documentation</task>
+  </tasks>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/PRD.md</path>
+        <title>Product Requirements Document</title>
+        <section>Functional Requirements</section>
+        <snippet>FR-001 Authentication and Authorization (JWT, password hashing, role claim). FR-002 Resume upload and parsing. Security requirements include strong password hashing (bcrypt), JWT with rotation, input validation.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture.md</path>
+        <title>Architecture Document</title>
+        <section>Data Architecture & Security</section>
+        <snippet>User model: { email, hashed_password, role }. MongoDB + Beanie ODM for operational data. JWT bearer auth with sub (user id) and role claims. FastAPI async backend with versioned routes under /api/v1/*.</snippet>
+      </doc>
+      <doc>
+        <path>docs/epic-onboarding-profile.md</path>
+        <title>Onboarding & Profile Epic</title>
+        <section>Scope</section>
+        <snippet>Resume upload (PDF/DOCX) and parsing to structured fields. Minimal profile (location, role targets, preferences). Seeker dashboard with progress and next actions.</snippet>
+      </doc>
+    </docs>
+
+    <code>
+      <artifact>
+        <path>backend/app/models/user.py</path>
+        <kind>model</kind>
+        <symbol>User</symbol>
+        <lines>6-12</lines>
+        <reason>Current User model needs extension with phone, linkedin_url, website_url, is_active, and deleted_at fields</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/models/profile.py</path>
+        <kind>model</kind>
+        <symbol>Profile</symbol>
+        <lines>8-18</lines>
+        <reason>Profile model for resume management - reuse resume_path for re-upload feature</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/models/application.py</path>
+        <kind>model</kind>
+        <symbol>Application</symbol>
+        <lines>33-62</lines>
+        <reason>Applications need anonymization when user is permanently deleted (GDPR compliance)</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/api/v1/routes/auth.py</path>
+        <kind>route</kind>
+        <symbol>register, login</symbol>
+        <lines>10-26</lines>
+        <reason>Existing auth patterns for JWT token handling and user authentication</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/api/deps.py</path>
+        <kind>dependency</kind>
+        <symbol>get_current_user, require_role</symbol>
+        <lines>12-41</lines>
+        <reason>Use get_current_user for authenticating settings endpoints. Pattern for role-based access</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/api/v1/routes/uploads.py</path>
+        <kind>route</kind>
+        <symbol>upload_resume</symbol>
+        <lines>16-54</lines>
+        <reason>Reuse resume upload logic for AC-5 (seeker resume re-upload)</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/core/security.py</path>
+        <kind>service</kind>
+        <symbol>hash_password, verify_password</symbol>
+        <reason>Password hashing utilities for account deletion password confirmation</reason>
+      </artifact>
+      <artifact>
+        <path>backend/app/services/parsing.py</path>
+        <kind>service</kind>
+        <symbol>parse_resume</symbol>
+        <reason>Resume parsing service for re-upload functionality</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/app/page.tsx</path>
+        <kind>component</kind>
+        <symbol>HomePage</symbol>
+        <lines>70-249</lines>
+        <reason>Existing patterns for API calls with JWT token, state management, and error handling</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/components/AuthForm.tsx</path>
+        <kind>component</kind>
+        <symbol>AuthForm</symbol>
+        <lines>24-129</lines>
+        <reason>Form patterns with Input and Button components - reuse for settings form</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/components/Input.tsx</path>
+        <kind>component</kind>
+        <symbol>Input</symbol>
+        <lines>9-31</lines>
+        <reason>Reusable input component with label, error, and helper text support</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/components/Button.tsx</path>
+        <kind>component</kind>
+        <symbol>Button</symbol>
+        <reason>Reusable button component with variants (primary, secondary, success, danger) - use danger for delete button</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/components/Alert.tsx</path>
+        <kind>component</kind>
+        <symbol>Alert</symbol>
+        <reason>Alert component for success/error messages in settings page</reason>
+      </artifact>
+      <artifact>
+        <path>frontend/components/Card.tsx</path>
+        <kind>component</kind>
+        <symbol>Card, CardHeader, CardTitle, CardBody</symbol>
+        <reason>Card components for structuring settings page sections</reason>
+      </artifact>
+    </code>
+
+    <dependencies>
+      <backend>
+        <package name="fastapi" version="latest">Async web framework</package>
+        <package name="beanie" version="latest">MongoDB ODM for User model extension</package>
+        <package name="pydantic" version="latest">Data validation and schemas</package>
+        <package name="python-jose" version="latest">JWT token decoding</package>
+        <package name="passlib" version="latest">Password verification for deletion confirmation</package>
+        <package name="python-multipart" version="latest">File upload support (resume re-upload)</package>
+        <package name="pytest" version="latest">Testing framework</package>
+        <package name="pytest-asyncio" version="latest">Async test support</package>
+      </backend>
+      <frontend>
+        <package name="next" version="14.2.0">React framework with App Router</package>
+        <package name="react" version="18">UI library</package>
+        <package name="typescript" version="latest">Type safety</package>
+      </frontend>
+    </dependencies>
+  </artifacts>
+
+  <interfaces>
+    <api>
+      <endpoint name="GET /api/v1/users/me" kind="REST">
+        <signature>GET /api/v1/users/me - Returns current user profile with contact info</signature>
+        <response>{id, email, role, phone?, linkedin_url?, website_url?, created_at, is_active}</response>
+        <path>backend/app/api/v1/routes/users.py (NEW)</path>
+      </endpoint>
+      <endpoint name="PATCH /api/v1/users/me" kind="REST">
+        <signature>PATCH /api/v1/users/me - Updates user contact information</signature>
+        <request>{phone?, linkedin_url?, website_url?}</request>
+        <response>{id, email, role, phone, linkedin_url, website_url, updated_at}</response>
+        <path>backend/app/api/v1/routes/users.py (NEW)</path>
+      </endpoint>
+      <endpoint name="POST /api/v1/users/me/deactivate" kind="REST">
+        <signature>POST /api/v1/users/me/deactivate - Soft deletes user account</signature>
+        <response>{message: "Account deactivated"}</response>
+        <path>backend/app/api/v1/routes/users.py (NEW)</path>
+      </endpoint>
+      <endpoint name="DELETE /api/v1/users/me" kind="REST">
+        <signature>DELETE /api/v1/users/me - Permanently deletes user account (GDPR)</signature>
+        <request>{password: string} (confirmation)</request>
+        <response>{message: "Account permanently deleted"}</response>
+        <path>backend/app/api/v1/routes/users.py (NEW)</path>
+      </endpoint>
+      <endpoint name="POST /api/v1/uploads/resume" kind="REST">
+        <signature>POST /api/v1/uploads/resume - Uploads/replaces resume (EXISTING)</signature>
+        <request>multipart/form-data with file</request>
+        <response>ProfilePublic</response>
+        <path>backend/app/api/v1/routes/uploads.py (line 16)</path>
+      </endpoint>
+    </api>
+  </interfaces>
+
+  <constraints>
+    <development>
+      <pattern>Routes must be versioned under /api/v1/* following existing pattern</pattern>
+      <pattern>Use Beanie Document models for database operations (async)</pattern>
+      <pattern>Protect routes with get_current_user dependency from app.api.deps</pattern>
+      <pattern>Return appropriate HTTP status codes (200, 201, 400, 401, 403, 404)</pattern>
+      <pattern>Use Pydantic schemas for request/response validation</pattern>
+      <pattern>Handle errors with HTTPException with clear detail messages</pattern>
+      <pattern>Frontend: Use "use client" directive for Next.js client components</pattern>
+      <pattern>Frontend: Store JWT token in state and pass as Bearer token in headers</pattern>
+      <pattern>Frontend: Use existing component library (Input, Button, Alert, Card)</pattern>
+      <pattern>Frontend: Follow existing API_BASE pattern for backend URL</pattern>
+    </development>
+    <testing>
+      <requirement>Unit tests for all new backend endpoints using pytest</requirement>
+      <requirement>Test GDPR deletion cascade (applications anonymization)</requirement>
+      <requirement>Test soft delete vs hard delete logic</requirement>
+      <requirement>Test password confirmation for permanent deletion</requirement>
+      <requirement>Test role-based access (seekers can't see employer sections)</requirement>
+      <requirement>Integration test for resume re-upload (reuse existing test patterns)</requirement>
+      <requirement>E2E test covering full settings flow for both roles</requirement>
+    </testing>
+    <security>
+      <requirement>Verify user identity via JWT token for all settings operations</requirement>
+      <requirement>Require password re-entry for permanent account deletion</requirement>
+      <requirement>Audit log all deletion events with timestamp and user_id</requirement>
+      <requirement>Anonymize user data in applications (replace user_id with "deleted_user")</requirement>
+      <requirement>Delete resume files from storage/resumes/ on account deletion</requirement>
+      <requirement>Validate URL formats for linkedin_url and website_url</requirement>
+    </security>
+    <gdpr>
+      <requirement>Permanent deletion must remove all personal data from database</requirement>
+      <requirement>Cascade deletion to related records (applications, profiles, resume files)</requirement>
+      <requirement>Log deletion events for compliance audit trail</requirement>
+      <requirement>Provide clear warning about irreversibility of permanent deletion</requirement>
+      <requirement>Soft delete allows account reactivation (is_active=false, not deleted)</requirement>
+    </gdpr>
+  </constraints>
+
+  <tests>
+    <standards>
+      Tests follow pytest patterns with async support (pytest-asyncio). Backend tests use conftest.py for fixtures including test database, mock authentication tokens. Test files match pattern test_*.py in backend/tests/. Frontend tests use Jest with React Testing Library. E2E tests use Playwright in frontend/e2e/tests/.</standards>
+    <locations>
+      <location>backend/tests/ - Backend unit and integration tests</location>
+      <location>frontend/__tests__/ - Frontend component tests</location>
+      <location>frontend/e2e/tests/ - End-to-end tests</location>
+    </locations>
+    <ideas>
+      <idea ac="AC-1">Test GET /api/users/me returns user profile with all fields including new contact fields</idea>
+      <idea ac="AC-1">Test account age calculation from created_at timestamp</idea>
+      <idea ac="AC-2">Test PATCH /api/users/me updates contact info successfully</idea>
+      <idea ac="AC-2">Test URL validation for linkedin_url and website_url</idea>
+      <idea ac="AC-2">Test phone number format validation (optional but recommended)</idea>
+      <idea ac="AC-3">Test POST /api/users/me/deactivate sets is_active=false</idea>
+      <idea ac="AC-3">Test deactivated user cannot login</idea>
+      <idea ac="AC-3">Test account reactivation flow (if implemented)</idea>
+      <idea ac="AC-4">Test DELETE /api/users/me requires password confirmation</idea>
+      <idea ac="AC-4">Test permanent deletion removes user record from database</idea>
+      <idea ac="AC-4">Test applications are anonymized (user_id → "deleted_user")</idea>
+      <idea ac="AC-4">Test resume files are deleted from storage</idea>
+      <idea ac="AC-4">Test deletion event is logged for audit</idea>
+      <idea ac="AC-4">Test deleted user cannot login</idea>
+      <idea ac="AC-5">Test seeker can re-upload resume replacing old one</idea>
+      <idea ac="AC-5">Test profile is re-parsed after resume upload</idea>
+      <idea ac="AC-6">Test employer sees employer-specific sections (placeholder)</idea>
+      <idea>E2E: Navigate to /settings, update contact info, verify changes</idea>
+      <idea>E2E: Soft delete account and verify logout</idea>
+      <idea>E2E: Permanent delete with confirmation flow</idea>
+    </ideas>
+  </tests>
+
+  <dev_notes>
+    <note priority="high">Create new file backend/app/api/v1/routes/users.py for settings endpoints</note>
+    <note priority="high">Extend User model in backend/app/models/user.py with: phone, linkedin_url, website_url, is_active, deleted_at, created_at</note>
+    <note priority="high">Create frontend/app/settings/page.tsx for settings page</note>
+    <note priority="high">GDPR deletion must cascade: User → Applications (anonymize) → Profile → Resume files</note>
+    <note priority="medium">Reuse existing upload_resume endpoint for resume re-upload (AC-5)</note>
+    <note priority="medium">Create reusable Modal component for confirmation dialogs</note>
+    <note priority="medium">Use danger variant Button for permanent delete (red theme)</note>
+    <note priority="medium">Employer settings section is placeholder for now (scope TBD)</note>
+    <note priority="low">Consider adding created_at field to User model if not present</note>
+    <note priority="low">Password change is explicitly out of scope (future story)</note>
+  </dev_notes>
+</story-context>
+
+
+

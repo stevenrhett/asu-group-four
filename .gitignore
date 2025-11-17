@@ -50,6 +50,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json
+*.tsbuildinfo
 
 # Testing
 .coverage
@@ -110,6 +111,8 @@ Thumbs.db
 backend/storage/
 frontend/inspect-ui*.ts
 /tmp/
+.backend.pid
+.frontend.pid
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md

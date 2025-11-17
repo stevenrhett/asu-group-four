@@ -2,9 +2,28 @@
 
 This directory contains all project documentation organized by category.
 
+## 🆕 Recent Updates (November 2024)
+
+### Service Management Enhancements
+- **New unified management script**: `manage.sh` consolidates all service operations
+- **Automatic port cleanup**: Restart commands now automatically free up blocked ports
+- **Deprecated scripts removed**: `start.sh` and `cleanup-services.sh` no longer needed
+- **Documentation organized**: All `.md` files moved to `docs/` for better structure
+
+### Key Improvements
+- ✅ Single command to start/stop/restart all services
+- ✅ Automatic cleanup of orphaned processes on restart
+- ✅ Better error handling and troubleshooting
+- ✅ Comprehensive documentation with categorized index
+
+See [SCRIPT-CLEANUP-SUMMARY.md](SCRIPT-CLEANUP-SUMMARY.md) and [CHANGELOG.md](CHANGELOG.md) for complete details.
+
+---
+
 ## Quick Links
 
 - [Quick Start Guide](quick-start.md) - Get started with the project
+- [Service Management Guide](service-management-guide.md) - Managing services with manage.sh
 - [Product Requirements](PRD.md) - Full product requirements document
 - [Architecture](architecture.md) - System architecture and design
 - [Tech Spec](tech-spec.md) - Technical specifications
@@ -57,3 +76,13 @@ Sprint artifacts are organized in the `sprints/` subdirectory:
 ### Status Tracking
 - `sprint-status.yaml` - Current sprint status
 - `bmm-workflow-status.yaml` - BMM workflow status
+
+### Recent Additions (November 2024)
+- `service-management-guide.md` - Complete service management documentation
+- `MANAGE-QUICK-REFERENCE.md` - Quick command reference for manage.sh
+- `CHANGELOG.md` - Service management version history
+- `TROUBLESHOOTING-404.md` - Troubleshooting port conflicts and 404 errors
+- `SOLUTION-PORT-CLEANUP.md` - Port cleanup solution overview
+- `RESTART-ENHANCEMENT-SUMMARY.md` - Technical details on restart enhancements
+- `SCRIPT-CLEANUP-SUMMARY.md` - Documentation of deprecated script removal
+- `FILE-ORGANIZATION-SUMMARY.md` - File reorganization documentation
