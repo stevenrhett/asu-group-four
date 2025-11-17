@@ -296,8 +296,8 @@ export default function SettingsPage() {
 
       <h1 style={{ marginBottom: "var(--space-8)", color: "var(--neutral-900)" }}>Account Settings</h1>
 
-      {error && <Alert variant="error" style={{ marginBottom: "var(--space-6)" }}>{error}</Alert>}
-      {saveMessage && <Alert variant="success" style={{ marginBottom: "var(--space-6)" }}>{saveMessage}</Alert>}
+      {error && <div style={{ marginBottom: "var(--space-6)" }}><Alert variant="error">{error}</Alert></div>}
+      {saveMessage && <div style={{ marginBottom: "var(--space-6)" }}><Alert variant="success">{saveMessage}</Alert></div>}
 
       {/* Account Info */}
       <Card glassmorphic style={{ marginBottom: "var(--space-6)" }}>
@@ -377,8 +377,8 @@ export default function SettingsPage() {
             <CardTitle>Resume</CardTitle>
           </CardHeader>
           <CardBody>
-            {uploadMessage && <Alert variant="success" style={{ marginBottom: "var(--space-4)" }}>{uploadMessage}</Alert>}
-            {uploadError && <Alert variant="error" style={{ marginBottom: "var(--space-4)" }}>{uploadError}</Alert>}
+            {uploadMessage && <div style={{ marginBottom: "var(--space-4)" }}><Alert variant="success">{uploadMessage}</Alert></div>}
+            {uploadError && <div style={{ marginBottom: "var(--space-4)" }}><Alert variant="error">{uploadError}</Alert></div>}
             <form onSubmit={handleResumeUpload}>
               <Input
                 label="Upload New Resume"
