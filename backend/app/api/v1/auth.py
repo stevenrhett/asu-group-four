@@ -19,70 +19,86 @@ router = APIRouter()
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(user_data: UserRegister):
     """Register a new user"""
-    
-    # Check if user already exists
-    existing_user = await User.find_one(User.email == user_data.email)
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-    
-    # Create user
-    user = User(
-        email=user_data.email,
-        password_hash=get_password_hash(user_data.password),
-        role=user_data.role,
-        is_active=True,
-        is_verified=False,
-    )
-    await user.insert()
-    
-    # Create corresponding profile
     try:
-        if user_data.role == UserRole.JOB_SEEKER:
-            profile = JobSeekerProfile(
-                user_id=user.id,
-                first_name="",
-                last_name="",
+        # Check if user already exists
+        existing_user = await User.find_one(User.email == user_data.email)
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
             )
-            await profile.insert()
-        elif user_data.role == UserRole.EMPLOYER:
-            profile = EmployerProfile(
-                user_id=user.id,
-                company_name="",
+        
+        # Create user
+        try:
+            user = User(
+                email=user_data.email,
+                password_hash=get_password_hash(user_data.password),
+                role=user_data.role,
+                is_active=True,
+                is_verified=False,
             )
-            await profile.insert()
+            await user.insert()
+        except Exception as e:
+            logger.error(f"Failed to create user: {e}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Registration failed. Please try again."
+            )
+        
+        # Create corresponding profile
+        try:
+            if user_data.role == UserRole.JOB_SEEKER:
+                profile = JobSeekerProfile(
+                    user_id=user.id,
+                    first_name="",
+                    last_name="",
+                )
+                await profile.insert()
+            elif user_data.role == UserRole.EMPLOYER:
+                profile = EmployerProfile(
+                    user_id=user.id,
+                    company_name="",
+                )
+                await profile.insert()
+        except Exception as e:
+            logger.error(f"Failed to create profile: {e}", exc_info=True)
+            await user.delete()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Registration failed. Please try again."
+            )
+        
+        # Generate tokens
+        access_token = create_access_token(data={
+            "sub": str(user.id),
+            "email": user.email,
+            "role": user.role.value
+        })
+        refresh_token = create_refresh_token(data={"sub": str(user.id)})
+        
+        logger.info(f"User registered: {user.email} (role: {user.role})")
+        
+        return TokenResponse(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            user=UserResponse(
+                id=str(user.id),
+                email=user.email,
+                role=user.role,
+                is_active=user.is_active,
+                is_verified=user.is_verified,
+                created_at=user.created_at,
+            )
+        )
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
     except Exception as e:
-        logger.error(f"Failed to create profile: {e}")
-        await user.delete()
+        logger.error(f"Unexpected error during registration: {e}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to create user profile"
+            detail="Registration failed. Please try again."
         )
-    
-    # Generate tokens
-    access_token = create_access_token(data={
-        "sub": str(user.id),
-        "email": user.email,
-        "role": user.role.value
-    })
-    refresh_token = create_refresh_token(data={"sub": str(user.id)})
-    
-    logger.info(f"User registered: {user.email} (role: {user.role})")
-    
-    return TokenResponse(
-        access_token=access_token,
-        refresh_token=refresh_token,
-        user=UserResponse(
-            id=str(user.id),
-            email=user.email,
-            role=user.role,
-            is_active=user.is_active,
-            is_verified=user.is_verified,
-            created_at=user.created_at,
-        )
-    )
 
 
 @router.post("/login", response_model=TokenResponse)

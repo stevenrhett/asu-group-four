@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 from beanie import Document, Link
-from pydantic import Field
+from pydantic import BaseModel, Field, ConfigDict
 from bson import ObjectId
 from enum import Enum
 from app.models.user import User
@@ -67,10 +67,9 @@ class JobPreferences(BaseModel):
     industries: List[str] = []
 
 
-from pydantic import BaseModel
-
-
 class JobSeekerProfile(Document):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     user_id: ObjectId = Field(..., unique=True)
     
     # Personal Info
@@ -108,6 +107,8 @@ class JobSeekerProfile(Document):
 
 
 class EmployerProfile(Document):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     user_id: ObjectId = Field(..., unique=True)
     
     # Company Info

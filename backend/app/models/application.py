@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 from beanie import Document
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, ConfigDict
 from bson import ObjectId
 from enum import Enum
 
@@ -19,6 +19,8 @@ class ApplicationStatus(str, Enum):
 
 
 class StatusHistory(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     status: ApplicationStatus
     changed_at: datetime = Field(default_factory=datetime.utcnow)
     changed_by: Optional[ObjectId] = None
@@ -39,6 +41,8 @@ class ResumeSnapshot(BaseModel):
 
 
 class Application(Document):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     job_id: ObjectId
     job_seeker_id: ObjectId
     
@@ -78,6 +82,8 @@ class Application(Document):
 
 
 class Notification(Document):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     user_id: ObjectId
     
     # Notification Details
