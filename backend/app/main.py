@@ -1,140 +1,99 @@
-from contextlib import asynccontextmanager
-import json
-import logging
-from typing import Any, Dict
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
+from motor.motor_asyncio import AsyncIOMotorClient
+from beanie import init_beanie
+from contextlib import asynccontextmanager
 
-from app.api.v1.routes.applications import router as applications_router
-from app.api.v1.routes.auth import router as auth_router
-from app.api.v1.routes.inbox import router as inbox_router
-from app.api.v1.routes.jobs import router as jobs_router
-from app.api.v1.routes.metrics import router as metrics_router
-from app.api.v1.routes.performance import router as performance_router
-from app.api.v1.routes.recommendations import router as recommendations_router
-from app.api.v1.routes.scheduling import router as scheduling_router
-from app.api.v1.routes.uploads import router as uploads_router
-from app.api.v1.routes.users import router as users_router
-from app.core import compat  # noqa: F401
-from app.core.context import get_correlation_id, set_correlation_id
-from app.db.init_db import init_db
+from app.core.config import settings
+from app.core.logging import setup_logging, get_logger
+from app.models.user import User
+from app.models.profile import JobSeekerProfile, EmployerProfile
+from app.models.job import Job
+from app.models.application import Application, Notification
 
-logger = logging.getLogger("job_portal")
+# Import routers (will create these next)
+from app.api.v1 import auth, seekers, employers, jobs, applications
 
-
-def setup_logging() -> None:
-    if logger.handlers:
-        return
-
-    handler = logging.StreamHandler()
-
-    class JsonFormatter(logging.Formatter):
-        def format(self, record: logging.LogRecord) -> str:
-            payload: Dict[str, Any] = {
-                "level": record.levelname,
-                "message": record.getMessage(),
-                "logger": record.name,
-            }
-            correlation = get_correlation_id()
-            if correlation:
-                payload["correlation_id"] = correlation
-            if record.exc_info:
-                payload["exception"] = self.formatException(record.exc_info)
-            return json.dumps(payload)
-
-    handler.setFormatter(JsonFormatter())
-    logger.setLevel(logging.INFO)
-    logger.addHandler(handler)
-
-
-class CorrelationIdMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        corr_id = request.headers.get("X-Correlation-ID")
-        corr_id = set_correlation_id(corr_id)
-        request.state.correlation_id = corr_id
-        response = await call_next(request)
-        response.headers["X-Correlation-ID"] = corr_id
-        return response
+logger = get_logger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    setup_logging()
-    await init_db()
+    """Lifecycle manager for startup and shutdown"""
+    # Startup
+    logger.info("Starting JobPortal API...")
+    
+    # Setup logging
+    setup_logging("INFO" if not settings.DEBUG else "DEBUG")
+    
+    # Initialize MongoDB
+    try:
+        client = AsyncIOMotorClient(settings.MONGODB_URL)
+        await init_beanie(
+            database=client[settings.DATABASE_NAME],
+            document_models=[
+                User,
+                JobSeekerProfile,
+                EmployerProfile,
+                Job,
+                Application,
+                Notification,
+            ]
+        )
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
+        raise
+    
     yield
+    
+    # Shutdown
+    logger.info("Shutting down JobPortal API...")
+    client.close()
 
 
-app = FastAPI(title="Job Portal API", version="0.1.0", lifespan=lifespan)
+# Create FastAPI app
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.add_middleware(CorrelationIdMiddleware)
-
-# Add performance monitoring middleware (ST-013)
-from app.middleware.performance import PerformanceMonitoringMiddleware
-app.add_middleware(PerformanceMonitoringMiddleware)
 
 
-@app.middleware("http")
-async def request_logging_middleware(request: Request, call_next):
-    logger.info(
-        json.dumps(
-            {
-                "event": "request_start",
-                "method": request.method,
-                "path": request.url.path,
-            }
-        )
-    )
-    try:
-        response = await call_next(request)
-        logger.info(
-            json.dumps(
-                {
-                    "event": "request_complete",
-                    "method": request.method,
-                    "path": request.url.path,
-                    "status_code": response.status_code,
-                }
-            )
-        )
-        return response
-    except Exception:
-        logger.exception("request_failed")
-        raise
-
-
-@app.exception_handler(Exception)
-async def unhandled_exception_handler(request: Request, exc: Exception):
-    logger.exception("unhandled_error")
-    return JSONResponse(
-        status_code=500,
-        content={
-            "detail": "Internal server error",
-            "correlation_id": get_correlation_id(),
-        },
-    )
-
-
+# Health check
 @app.get("/health")
-async def health():
-    return {"status": "ok"}
+async def health_check():
+    return {
+        "status": "healthy",
+        "app": settings.APP_NAME,
+        "version": settings.APP_VERSION
+    }
 
 
-app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
-app.include_router(users_router, prefix="/api/v1/users", tags=["users"])
-app.include_router(jobs_router, prefix="/api/v1/jobs", tags=["jobs"])
-app.include_router(applications_router, prefix="/api/v1/applications", tags=["applications"])
-app.include_router(scheduling_router, prefix="/api/v1/scheduling", tags=["scheduling"])
-app.include_router(uploads_router, prefix="/api/v1/uploads", tags=["uploads"])
-app.include_router(recommendations_router, prefix="/api/v1/recommendations", tags=["recommendations"])
-app.include_router(inbox_router, prefix="/api/v1/inbox", tags=["inbox"])
-app.include_router(metrics_router, prefix="/api/v1", tags=["metrics"])
-app.include_router(performance_router, prefix="/api/v1", tags=["performance"])
+# Include routers
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
+app.include_router(seekers.router, prefix="/api/v1/seekers", tags=["Job Seekers"])
+app.include_router(employers.router, prefix="/api/v1/employers", tags=["Employers"])
+app.include_router(jobs.router, prefix="/api/v1/jobs", tags=["Jobs"])
+app.include_router(applications.router, prefix="/api/v1/applications", tags=["Applications"])
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "app.main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG
+    )

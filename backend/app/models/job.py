@@ -1,64 +1,94 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional, List
+from beanie import Document
+from pydantic import Field, BaseModel
+from bson import ObjectId
 from enum import Enum
 
-from beanie import Document
-from pydantic import BaseModel, Field
+
+class JobType(str, Enum):
+    FULL_TIME = "full_time"
+    PART_TIME = "part_time"
+    CONTRACT = "contract"
+    INTERNSHIP = "internship"
+
+
+class ExperienceLevel(str, Enum):
+    ENTRY = "entry"
+    MID = "mid"
+    SENIOR = "senior"
+    LEAD = "lead"
+    EXECUTIVE = "executive"
 
 
 class JobStatus(str, Enum):
-    """Job status enumeration."""
-    ACTIVE = "active"
-    ARCHIVED = "archived"
     DRAFT = "draft"
+    ACTIVE = "active"
+    PAUSED = "paused"
+    CLOSED = "closed"
+
+
+class JobLocation(BaseModel):
+    city: Optional[str] = None
+    state: Optional[str] = None
+    country: str = "USA"
+    is_remote: bool = False
+    remote_type: Optional[str] = None  # "remote", "hybrid", "on_site"
 
 
 class Job(Document):
+    employer_id: ObjectId
+    
+    # Job Details
     title: str
     description: str
-    location: Optional[str] = None
-    skills: List[str] = Field(default_factory=list)
-    employer_id: Optional[str] = None  # ID of the employer who posted the job
+    requirements: List[str] = []
+    responsibilities: List[str] = []
+    
+    # Job Specs
+    job_type: JobType
+    experience_level: ExperienceLevel
+    skills_required: List[str] = []
+    education_required: Optional[str] = None
+    
+    # Compensation
+    salary_min: Optional[int] = None
+    salary_max: Optional[int] = None
+    salary_currency: str = "USD"
+    
+    # Location
+    location: JobLocation
+    
+    # Employment Details
+    industry: Optional[str] = None
+    department: Optional[str] = None
+    
+    # Application Settings
+    application_deadline: Optional[datetime] = None
+    spots_available: Optional[int] = None
+    
+    # Status
     status: JobStatus = JobStatus.ACTIVE
+    
+    # AI Embeddings
+    job_embedding: Optional[List[float]] = None
+    
+    # Metadata
+    views_count: int = 0
+    applications_count: int = 0
+    
+    posted_at: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    archived_at: Optional[datetime] = None
     
-    # Indexing fields
-    tokens: List[str] = Field(default_factory=list)
-    normalized_text: Optional[str] = None
-    embedding: Optional[List[float]] = None
-    indexed_at: Optional[datetime] = None
-
     class Settings:
         name = "jobs"
-
-
-class JobCreate(BaseModel):
-    """Schema for creating a new job posting."""
-    title: str = Field(..., min_length=3, max_length=200)
-    description: str = Field(..., min_length=10, max_length=5000)
-    location: Optional[str] = Field(None, max_length=200)
-    skills: List[str] = Field(default_factory=list)
-
-
-class JobUpdate(BaseModel):
-    """Schema for updating an existing job posting."""
-    title: Optional[str] = Field(None, min_length=3, max_length=200)
-    description: Optional[str] = Field(None, min_length=10, max_length=5000)
-    location: Optional[str] = Field(None, max_length=200)
-    skills: Optional[List[str]] = None
-
-
-class JobResponse(BaseModel):
-    """Schema for job response."""
-    id: str
-    title: str
-    description: str
-    location: Optional[str]
-    skills: List[str]
-    employer_id: Optional[str]
-    status: JobStatus
-    created_at: datetime
-    updated_at: datetime
-    archived_at: Optional[datetime] = None
+        indexes = [
+            "employer_id",
+            "status",
+            "job_type",
+            "experience_level",
+            "skills_required",
+            "location.city",
+            "posted_at",
+        ]
