@@ -8,6 +8,7 @@ from app.models.profile import EmployerProfile
 from app.models.user import UserRole
 from app.core.security import get_current_user_id, require_role
 from app.core.logging import get_logger
+from app.schemas.job import JobCreateSchema, JobUpdateSchema
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -45,33 +46,35 @@ async def get_job(job_id: str):
     """Get job details"""
     job = await Job.get(job_id)
     if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
-    # Increment view count
+        raise HTTPException(status_code=404, detail=f"Job with ID {job_id} not found")
+
+    # Increment view count with null check
+    if job.views_count is None:
+        job.views_count = 0
     job.views_count += 1
     await job.save()
-    
+
     return job
 
 
 @router.post("/")
 async def create_job(
-    job_data: dict,
+    job_data: JobCreateSchema,
     user_id: str = Depends(require_role(UserRole.EMPLOYER.value))
 ):
     """Create job posting"""
     # Get employer profile
     profile = await EmployerProfile.find_one(EmployerProfile.user_id == ObjectId(user_id))
     if not profile:
-        raise HTTPException(status_code=404, detail="Employer profile not found")
-    
-    # Create job - basic implementation
+        raise HTTPException(status_code=404, detail="Employer profile not found. Please complete your profile first.")
+
+    # Create job with validated schema
     job = Job(
         employer_id=profile.id,
-        **job_data
+        **job_data.dict()
     )
     await job.insert()
-    
+
     logger.info(f"Job created: {job.title} by employer {profile.company_name}")
     return job
 
@@ -79,23 +82,26 @@ async def create_job(
 @router.put("/{job_id}")
 async def update_job(
     job_id: str,
-    job_data: dict,
+    job_data: JobUpdateSchema,
     user_id: str = Depends(require_role(UserRole.EMPLOYER.value))
 ):
     """Update job posting"""
     job = await Job.get(job_id)
     if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
+        raise HTTPException(status_code=404, detail=f"Job with ID {job_id} not found")
+
     # Verify ownership
     profile = await EmployerProfile.find_one(EmployerProfile.user_id == ObjectId(user_id))
-    if not profile or job.employer_id != profile.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
-    
-    for key, value in job_data.items():
-        if hasattr(job, key):
-            setattr(job, key, value)
-    
+    if not profile:
+        raise HTTPException(status_code=404, detail="Employer profile not found")
+    if job.employer_id != profile.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this job")
+
+    # Update only provided fields
+    update_data = job_data.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(job, key, value)
+
     job.updated_at = datetime.utcnow()
     await job.save()
     return job

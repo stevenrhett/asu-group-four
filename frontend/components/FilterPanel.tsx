@@ -17,6 +17,11 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
   };
   
   const handleSalaryChange = () => {
+    // Validate salary range
+    if (salaryMin > salaryMax && salaryMax > 0) {
+      alert('Minimum salary cannot be greater than maximum salary');
+      return;
+    }
     onChange({ salary_min: salaryMin, salary_max: salaryMax });
   };
   
@@ -41,6 +46,7 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
             checked={filters.easy_apply || false}
             onChange={() => handleToggle('easy_apply')}
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            aria-label="Filter for easy apply jobs only"
           />
           <span className="ml-2 text-sm text-gray-700">Easy Apply only</span>
         </label>
@@ -51,6 +57,7 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
             checked={filters.remote_only || false}
             onChange={() => handleToggle('remote_only')}
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            aria-label="Filter for remote jobs only"
           />
           <span className="ml-2 text-sm text-gray-700">Remote only</span>
         </label>
@@ -61,8 +68,9 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
         <h4 className="text-sm font-medium text-gray-900 mb-3">Salary Range</h4>
         <div className="space-y-3">
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Minimum</label>
+            <label htmlFor="salary-min" className="block text-xs text-gray-600 mb-1">Minimum</label>
             <input
+              id="salary-min"
               type="number"
               value={salaryMin}
               onChange={(e) => setSalaryMin(parseInt(e.target.value) || 0)}
@@ -71,11 +79,13 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
               step="1000"
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="$0"
+              aria-label="Minimum salary"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Maximum</label>
+            <label htmlFor="salary-max" className="block text-xs text-gray-600 mb-1">Maximum</label>
             <input
+              id="salary-max"
               type="number"
               value={salaryMax}
               onChange={(e) => setSalaryMax(parseInt(e.target.value) || 0)}
@@ -84,11 +94,13 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
               step="1000"
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="$300,000"
+              aria-label="Maximum salary"
             />
           </div>
           <button
             onClick={handleSalaryChange}
             className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+            aria-label="Apply salary filters"
           >
             Apply
           </button>

@@ -11,21 +11,36 @@ export default function SeekerDashboard() {
   const [jobs, setJobs] = useState<any[]>([])
   const [applications, setApplications] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null)
         const [profileRes, jobsRes, appsRes] = await Promise.all([
           seekerAPI.getProfile(),
           jobsAPI.search({ limit: 5 }),
           applicationsAPI.getMyApplications(),
         ])
-        setProfile(profileRes.data)
-        setJobs(jobsRes.data)
-        setApplications(appsRes.data)
-      } catch (error) {
+
+        if (profileRes?.data) {
+          setProfile(profileRes.data)
+        }
+        if (jobsRes?.data) {
+          setJobs(Array.isArray(jobsRes.data) ? jobsRes.data : [])
+        }
+        if (appsRes?.data) {
+          setApplications(Array.isArray(appsRes.data) ? appsRes.data : [])
+        }
+      } catch (error: any) {
         console.error('Failed to fetch data:', error)
-        router.push('/auth/login')
+        const errorMessage = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data'
+        setError(errorMessage)
+
+        // Only redirect if it's an authentication error
+        if (error?.response?.status === 401) {
+          router.push('/auth/login')
+        }
       } finally {
         setLoading(false)
       }
@@ -41,7 +56,47 @@ export default function SeekerDashboard() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+          <div className="text-center">
+            <svg
+              className="mx-auto h-12 w-12 text-red-500 mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Unable to Load Dashboard</h3>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
